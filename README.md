@@ -21,7 +21,3 @@ Paley was here
 hi ashi
 
 hi jcho
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
