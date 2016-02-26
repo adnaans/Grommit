@@ -1,3 +1,4 @@
+//Andrew's code
 function merge(x, y) {
 	var merged = [];
 	var i = 0;
@@ -26,3 +27,4 @@ for (var i = 0; i < c.length; i++){
 }
 
 alert(s);
+//end of Andrew's code
