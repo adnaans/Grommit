@@ -7,10 +7,14 @@ function merge(x, y) {
 	while (i < x.length || j < y.length){
 		if (x[i] > y[j]) {
 			merged.push(x[i]);
-			i++;
+			if (i < x.length) {
+				i++;
+			}
 		} else {
 			merged.push(y[j]);
-			j++;
+			if (j < y.length){
+				j++;
+			}
 		}
 	}
 	
