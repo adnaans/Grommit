@@ -5,23 +5,19 @@ function merge(x, y) {
 	var j = 0;
 	
 	while (i < x.length || j < y.length){
-		if (x[i] > y[j]) {
+		if (x[i] >= y[j] || j >= y.length) {
 			merged.push(x[i]);
-			if (i < x.length) {
-				i++;
-			}
-		} else {
+			i++;
+		} else if (x[i] <= y[j] || i >= x.length){
 			merged.push(y[j]);
-			if (j < y.length){
-				j++;
-			}
+			j++;
 		}
 	}
 	return merged;
 }
 
-// var x = [10, 10, 8, 7, 6, 5, 5, 4, 3, 2];
-// var y = [11, 9, 9, 8, 7, 7, 6, 5, 3, 3, 3, 2, 1, 1];
+// var x = [10, 10, 8, 7, 6, 5, 5, 4, 3, 2, 2, 2, 2, 1, 1];
+// var y = [23];
 // var c = merge(x, y);
 // var s = "";
 // 
