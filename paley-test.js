@@ -3,7 +3,7 @@ function merge(x, y) {
 	var merged = [];
 	var i = 0;
 	var j = 0;
-	
+
 	while (i < x.length || j < y.length){
 		if (x[i] >= y[j] || j >= y.length) {
 			merged.push(x[i]);
@@ -27,7 +27,7 @@ function part1(arr){
 }
 //end of Adnaan's code
 
-//Julie's code 
+//Julie's code
 function part2(arr){
 var finalarr = [];
 if(arr.length % 2 == 1){
@@ -37,6 +37,17 @@ return finalarr;
 }
 else{
 for(int i= arr.lenght/2; i<arr.length; i++){
-finalarr.push(arr[i]); 
+finalarr.push(arr[i]);
 }
-return finalarr; }}	
+return finalarr; }}
+//end of Julie's code
+
+//Justine's code
+function mergesort (arr){
+	if (arr.length<2)
+	{
+		return arr;
+	}
+	else return merge (mergesort (part1(arr)), mergesort(part2(arr));
+}
+//end of Justine's code 
