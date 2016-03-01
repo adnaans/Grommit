@@ -26,3 +26,17 @@ function part1(arr){
 	return finalarr;
 }
 //end of Adnaan's code
+
+//Julie's code 
+function part2(arr){
+var finalarr = [];
+if(arr.length % 2 == 1){
+for(int i = Math.floor(arr.length/2); i<arr.length; i++){
+finalarr.push(arr[i]);}
+return finalarr;
+}
+else{
+for(int i= arr.lenght/2; i<arr.length; i++){
+finalarr.push(arr[i]); 
+}
+return finalarr; }}	
