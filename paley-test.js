@@ -15,15 +15,14 @@ function merge(x, y) {
 	}
 	return merged;
 }
-
-// var x = [10, 10, 8, 7, 6, 5, 5, 4, 3, 2, 2, 2, 2, 1, 1];
-// var y = [23];
-// var c = merge(x, y);
-// var s = "";
-// 
-// for (var i = 0; i < c.length; i++){
-// 	s = s + c[i] + " ";
-// }
-// 
-// alert(s);
 //end of Andrew's code
+
+//Adnaan's code
+function part1(arr){
+	var finalarr = [];
+	for(var i = 0; i < Math.floor(arr.length/2) ; i++){
+		finalarr.push(arr[i]);
+	}
+	return finalarr;
+}
+//end of Adnaan's code
