@@ -5,9 +5,9 @@ function initMap() {
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
 
-  // Define the LatLng coordinates for the polygon's path.
+ z // Define the LatLng coordinates for the polygon's path.
   var data = [ //we need data for each section here
-    {lat: 25.774, lng: -80.190},
+    {lat: 38.429, lng: -80.190},
     {lat: 18.466, lng: -66.118},
     {lat: 32.321, lng: -64.757},
     {lat: 25.774, lng: -80.190}
