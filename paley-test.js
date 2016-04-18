@@ -41,8 +41,8 @@ function part2(arr){
 		}
 	return finalarr; 
 	}
-=======
-
+}
+	
 //end of Julie's code
 
 //Justine's code
