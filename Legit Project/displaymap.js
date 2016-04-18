@@ -7,7 +7,7 @@ function initMap() {
 
  z // Define the LatLng coordinates for the polygon's path.
   var data = [ //we need data for each section here
-    {lat: 37.44, lng: -122.16},
+    {lat: 37.43, lng: -122.16},
     {lat: 37.44, lng: -122.15},
     {lat: 37.43, lng: -122.15},
     {lat: 37.43, lng: -122.16}
