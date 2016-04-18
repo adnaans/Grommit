@@ -1,19 +1,19 @@
 function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 5,
-    center: {lat: 38.4292, lng: -122.1381},
+    zoom: 15,
+    center: {lat: 37.444359, lng: -122.159902},
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
 
  z // Define the LatLng coordinates for the polygon's path.
   var data = [ //we need data for each section here
-    {lat: 38.429, lng: -80.190},
-    {lat: 18.466, lng: -66.118},
-    {lat: 32.321, lng: -64.757},
-    {lat: 25.774, lng: -80.190}
+    {lat: 37.44, lng: -122.16},
+    {lat: 37.44, lng: -122.15},
+    {lat: 37.43, lng: -122.15},
+    {lat: 37.43, lng: -122.16}
   ];
 
-  //need to set color here. i will set the va
+  //need to set color here. i will set the var for now
   var color = '#FF0000';
 
   // for loop not working so we need to display each shape
