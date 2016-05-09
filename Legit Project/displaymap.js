@@ -5,7 +5,6 @@ function initMap() {
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
 
-<<<<<<< Updated upstream
   // Define the LatLng coordinates for the polygon's path.
   var data = [[ //we need data for each section here
     {lat: 37.468876, lng: -122.155271},
@@ -60,51 +59,4 @@ function initMap() {
     shape.setMap(map);
   }
 }
-=======
- // Define the LatLng coordinates for the polygon's path.
-  // var data = [ //we need data for each section here
-//     {lat: 37.468876, lng: -122.155271},
-//     {lat: 37.449333, lng: -122.173628},
-//     {lat: 37.428431, lng: -122.139875},
-//     {lat: 37.448189, lng: -122.120452},
-//     {lat: 37.468876, lng: -122.155271}
-//   ];
 
-  //need to set color here. i will set the var for now
-  // var color = '#FF0000';
-// 
-//   // for loop not working so we need to display each shape
-//   var shape = new google.maps.Polygon({
-//     paths: data,
-//     strokeColor: '#FF0000',
-//     strokeOpacity: 0.8,
-//     strokeWeight: 2,
-//     fillColor: color,
-//     fillOpacity: 0.35
-//   });
-//   shape.setMap(map);
-
-var origin1 = new google.maps.LatLng(55.930385, -3.118425);
-var origin2 = "Greenwich, England";
-var destinationA = "Stockholm, Sweden";
-var destinationB = new google.maps.LatLng(50.087692, 14.421150);
-
-var service = new google.maps.DistanceMatrixService();
-service.getDistanceMatrix(
-  {
-    origins: [origin1, origin2],
-    destinations: [destinationA, destinationB],
-    travelMode: google.maps.TravelMode.DRIVING,
-    //transitOptions: TransitOptions,
-    //drivingOptions: DrivingOptions,
-    //unitSystem: UnitSystem,
-    //avoidHighways: Boolean,
-    //avoidTolls: Boolean,
-  }, callback);
-
-function callback(response, status) {
- console.log(response);
- 
-}
-}
->>>>>>> Stashed changes
