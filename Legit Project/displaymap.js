@@ -20,9 +20,37 @@ function initMap() {
   ]
   ];
 
-  //need to set color here. i will set the var for now
-  var color = '#FF0000';
+
+  //Recieve data here
+
+  
   for(var i = 0; i < data.length; i++){
+    var origin = {lat: 37.444359, lng: -122.159902};
+
+    var destination = data[i]; //NEED TO DO CALCULATIONS TO GET CENTER
+    var duraton;
+
+    var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
+    service.getDistanceMatrix({
+      origins: [origin],
+      destinations: [destination],
+      travelMode: google.maps.TravelMode.BIKING,
+      unitSystem: google.maps.UnitSystem.METRIC,
+    }, function(response, status) { //upon completion
+        if (status == google.maps.DistanceMatrixStatus.OK) {
+          var origins = response.originAddresses;
+          var destinations = response.destinationAddresses;
+          for (var i = 0; i < origins.length; i++) {
+            var results = response.rows[i].elements;
+            for (var j = 0; j < results.length; j++) {
+              duration = element.duration.value; //Goes to location and stores value of seconds into duration variable
+            }
+          }
+        }
+      });
+
+    var color = "#FF0000"; //WE NEED TO DECIDE COLOR SCHEMES BASED ON CORE SECONDS HERE USING THE DURATION VARIABLE
+
     var shape = new google.maps.Polygon({
       paths: data[i],
       strokeColor: '#FF0000',
