@@ -37,6 +37,23 @@ function initMap() {
         count++;
    }
  }
+    var destinations[]=new [data.length];
+      for (var i=0;i<data.length;i++){
+        var mat[][]=data[i];
+        var latsum=mat[0][0]+mat[0][1];
+        latsum/=2;
+        var lngsum=mat[1][1]+mat[1][2];
+        lngsum/=2;
+        destinations[i]={latsum, lngsum};
+       }
+
+  //planning on making this more efficient with API calls when actual data comes in
+  //but for testing it will call the API once to get all the information
+  for(var i = 0; i < data.length; i++){
+    var origin = {lat: 37.444359, lng: -122.159902};
+    var destination = data[i]; //NEED TO DO CALCULATIONS TO GET CENTER
+    var duraton;
+
     var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
     matrix.getDistanceMatrix({
       origins: [origin],
@@ -78,4 +95,3 @@ function initMap() {
   //       }
   //     });
 }
-
