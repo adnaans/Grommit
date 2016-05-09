@@ -5,7 +5,6 @@ function initMap() {
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
 
-  // Define the LatLng coordinates for the polygon's path.
   var data = [];
   var baseLat = 37.449333, baseLong = -122.173628;
   var endSElat = 37.428431, endSElong = -122.139875, endNElat = 37.468876, endNElong = -122.155271;
@@ -36,11 +35,26 @@ function initMap() {
         });
         shape.setMap(map);
         count++;
-     }
    }
-
-  // for(var i = 0; i < data.length; i++){
-  //   var origin = {lat: 37.444359, lng: -122.159902};
+ }
+    var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
+    matrix.getDistanceMatrix({
+      origins: [origin],
+      destinations: [destination],
+      travelMode: google.maps.TravelMode.BIKING,
+      unitSystem: google.maps.UnitSystem.METRIC,
+    }, function(response, status) { //upon completion
+        if (status == google.maps.DistanceMatrixStatus.OK) {
+          var origins = response.originAddresses;
+          var destinations = response.destinationAddresses;
+          for (var i = 0; i < origins.length; i++) {
+            var results = response.rows[i].elements;
+            for (var j = 0; j < results.length; j++) {
+              duration = element.duration.value; //Goes to location and stores value of seconds into duration variable
+            }
+          }
+        }
+      });
 
   //   var destination = data[i]; //NEED TO DO CALCULATIONS TO GET CENTER
   //   var duraton;
