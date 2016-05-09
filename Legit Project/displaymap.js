@@ -19,9 +19,18 @@ function initMap() {
     {lat: 25.774, lng: -80.190}
   ]
   ];
+  var destinations[]=new [data.length];
+    for (var i=0;i<data.length;i++){
+      var mat[][]=data[i];
+      var latsum=mat[0][0]+mat[0][1];
+      latsum/=2;
+      var lngsum=mat[1][1]+mat[1][2];
+      lngsum/=2;
+      destinations[i]={latsum, lngsum};
+  }
 
   //planning on making this more efficient with API calls when actual data comes in
-  //but for testing it will call the API once to get all the information  
+  //but for testing it will call the API once to get all the information
   for(var i = 0; i < data.length; i++){
     var origin = {lat: 37.444359, lng: -122.159902};
 
@@ -60,4 +69,3 @@ function initMap() {
     shape.setMap(map);
   }
 }
-
