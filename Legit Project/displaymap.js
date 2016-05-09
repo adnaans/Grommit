@@ -20,9 +20,6 @@ function initMap() {
   ]
   ];
 
-
-  //Recieve data here
-
   
   for(var i = 0; i < data.length; i++){
     var origin = {lat: 37.444359, lng: -122.159902};
