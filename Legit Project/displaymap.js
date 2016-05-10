@@ -27,19 +27,19 @@ function initMap() {
 
        var shape = new google.maps.Polygon({
           paths: data[count],
-          strokeColor: '#FF0000',
+          strokeColor: '#00ff00',
           strokeOpacity: 0.8,
           strokeWeight: 2,
-          fillColor: '#FF0000',
+          fillColor: '#99ff99',
           fillOpacity: 0.35
         });
         shape.setMap(map);
         count++;
    }
  }
-    var destinations[]=new [data.length];
+    var destinations = [];
       for (var i=0;i<data.length;i++){
-        var mat[][]=data[i];
+        var mat =data[i];
         var latsum=mat[0][0]+mat[0][1];
         latsum/=2;
         var lngsum=mat[1][1]+mat[1][2];
@@ -72,26 +72,5 @@ function initMap() {
           }
         }
       });
-
-  //   var destination = data[i]; //NEED TO DO CALCULATIONS TO GET CENTER
-  //   var duraton;
-
-  //   var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
-  //   service.getDistanceMatrix({
-  //     origins: [origin],
-  //     destinations: [destination],
-  //     travelMode: google.maps.TravelMode.BIKING,
-  //     unitSystem: google.maps.UnitSystem.METRIC,
-  //   }, function(response, status) { //upon completion
-  //       if (status == google.maps.DistanceMatrixStatus.OK) {
-  //         var origins = response.originAddresses;
-  //         var destinations = response.destinationAddresses;
-  //         for (var i = 0; i < origins.length; i++) {
-  //           var results = response.rows[i].elements;
-  //           for (var j = 0; j < results.length; j++) {
-  //             duration = element.duration.value; //Goes to location and stores value of seconds into duration variable
-  //           }
-  //         }
-  //       }
-  //     });
+  }
 }
