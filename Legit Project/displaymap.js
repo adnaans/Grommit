@@ -19,6 +19,7 @@ function initMap() {
     {lat: 25.774, lng: -80.190}
   ]
   ];
+<<<<<<< HEAD
   var origin = {lat: 37.444359, lng: -122.159902};
   var testdestination = {lat: 37.468876, lng: -122.155271};
   var destinations = [testdestination];
@@ -52,6 +53,40 @@ function initMap() {
             }
             else if(duration < 900){
               color = "#FF3333";
+=======
+  var destinations[]=new [data.length];
+    for (var i=0;i<data.length;i++){
+      var mat[][]=data[i];
+      var latsum=mat[0][0]+mat[0][1];
+      latsum/=2;
+      var lngsum=mat[1][1]+mat[1][2];
+      lngsum/=2;
+      destinations[i]={latsum, lngsum};
+  }
+
+  //planning on making this more efficient with API calls when actual data comes in
+  //but for testing it will call the API once to get all the information
+  for(var i = 0; i < data.length; i++){
+    var origin = {lat: 37.444359, lng: -122.159902};
+
+    var destination = data[i]; //NEED TO DO CALCULATIONS TO GET CENTER
+    var duraton;
+
+    var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
+    matrix.getDistanceMatrix({
+      origins: [origin],
+      destinations: [destination],
+      travelMode: google.maps.TravelMode.BIKING,
+      unitSystem: google.maps.UnitSystem.METRIC,
+    }, function(response, status) { //upon completion
+        if (status == google.maps.DistanceMatrixStatus.OK) {
+          var origins = response.originAddresses;
+          var destinations = response.destinationAddresses;
+          for (var i = 0; i < origins.length; i++) {
+            var results = response.rows[i].elements;
+            for (var j = 0; j < results.length; j++) {
+              duration = element.duration.value; //Goes to location and stores value of seconds into duration variable
+>>>>>>> origin/master
             }
             else{
               color = "#FF4D4D";
@@ -72,4 +107,3 @@ function initMap() {
     });
 
 }
-
