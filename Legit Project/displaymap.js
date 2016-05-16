@@ -5,7 +5,6 @@ function initMap() {
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
 
-<<<<<<< HEAD
   // Define the LatLng coordinates for the polygon's path.
   var data = [[ //we need data for each section here
     {lat: 37.468876, lng: -122.155271},
@@ -20,7 +19,6 @@ function initMap() {
     {lat: 25.774, lng: -80.190}
   ]
   ];
-<<<<<<< HEAD
   var origin = {lat: 37.444359, lng: -122.159902};
   var testdestination = {lat: 37.468876, lng: -122.155271};
   var destinations = [testdestination];
@@ -54,7 +52,6 @@ function initMap() {
             }
             else if(duration < 900){
               color = "#FF3333";
-=======
   var destinations[]=new [data.length];
     for (var i=0;i<data.length;i++){
       var mat[][]=data[i];
@@ -64,7 +61,6 @@ function initMap() {
       lngsum/=2;
       destinations[i]={latsum, lngsum};
   }
-=======
   var data = [];
   var baseLat = 37.449333, baseLong = -122.173628;
   var endSElat = 37.428431, endSElong = -122.139875, endNElat = 37.468876, endNElong = -122.155271;
@@ -106,7 +102,6 @@ function initMap() {
         lngsum/=2;
         destinations[i]={latsum, lngsum};
        }
->>>>>>> origin/master
 
   //planning on making this more efficient with API calls when actual data comes in
   //but for testing it will call the API once to get all the information
@@ -129,7 +124,6 @@ function initMap() {
             var results = response.rows[i].elements;
             for (var j = 0; j < results.length; j++) {
               duration = element.duration.value; //Goes to location and stores value of seconds into duration variable
->>>>>>> origin/master
             }
             else{
               color = "#FF4D4D";
@@ -146,13 +140,10 @@ function initMap() {
             shape.setMap(map);
           }
         }
-<<<<<<< HEAD
       }
     });
 
 }
-=======
       });
   }
 }
->>>>>>> origin/master
