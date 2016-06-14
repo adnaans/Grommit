@@ -49,34 +49,12 @@ function initMap() {
 
   //planning on making this more efficient with API calls when actual data comes in
   //but for testing it will call the API once to get all the information
-  // for(var i = 0; i < data.length; i++){
-  //   var origin = {lat: 37.444359, lng: -122.159902};
-  //   var destination = data[i]; //NEED TO DO CALCULATIONS TO GET CENTER
-  //   var duraton;
-  //
-  //   var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
-  //   matrix.getDistanceMatrix({
-  //     origins: [origin],
-  //     destinations: [destination],
-  //     travelMode: google.maps.TravelMode.BIKING,
-  //     unitSystem: google.maps.UnitSystem.METRIC,
-  //   }, function(response, status) { //upon completion
-  //       if (status == google.maps.DistanceMatrixStatus.OK) {
-  //         var origins = response.originAddresses;
-  //         var destinations = response.destinationAddresses;
-  //         for (var i = 0; i < origins.length; i++) {
-  //           var results = response.rows[i].elements;
-  //           for (var j = 0; j < results.length; j++) {
-  //             duration = element.duration.value; //Goes to location and stores value of seconds into duration variable]
-  //             system.log(duration);
-  //           }
-  //         }
-  //       }
-  //     });
-  // }
-  var origin = {lat: 37.444359, lng: -122.159902};
-  var destination = {lat: 38.000002, lng: -38.000002};
-  var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
+  for(var i = 0; i < data.length; i++){
+    var origin = {lat: 37.444359, lng: -122.159902};
+    var destination = new google.maps.LatLng(data[i][0],data[i][1]); //NEED TO DO CALCULATIONS TO GET CENTER
+    var duraton;
+
+    var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
     matrix.getDistanceMatrix({
       origins: [origin],
       destinations: [destination],
@@ -90,12 +68,35 @@ function initMap() {
           for (var i = 0; i < origins.length; i++) {
             var results = response.rows[i].elements;
             for (var j = 0; j < results.length; j++) {
-              console.log(response);
-              //duration = results.duration.value; //Goes to location and stores value of seconds into duration variable]
-              console.log(results);
+              var duration = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+              console.log(duration);
             }
           }
         }
       });
+  }
+  // var origin = new google.maps.LatLng(37.444359, -122.159902);
+  // var destination = new google.maps.LatLng(38.000002, -122.000002);
+  // var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
+  //   matrix.getDistanceMatrix({
+  //     origins: [origin],
+  //     destinations: [destination],
+  //     travelMode: google.maps.TravelMode.BICYCLING,
+  //     unitSystem: google.maps.UnitSystem.METRIC,
+  //   }, function(response, status) { //upon completion
+  //       if (status == google.maps.DistanceMatrixStatus.OK) {
+  //         console.log(status);
+  //         var origins = response.originAddresses;
+  //         var destinations = response.destinationAddresses;
+  //         for (var i = 0; i < origins.length; i++) {
+  //           var results = response.rows[i].elements;
+  //           for (var j = 0; j < results.length; j++) {
+  //             console.log(response);
+  //             var duration = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+  //             console.log(duration);
+  //           }
+  //         }
+  //       }
+  //     });
 
 }
