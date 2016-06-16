@@ -25,15 +25,6 @@ function initMap() {
        {lat: startLat, lng: startLong},
        ]
 
-       var shape = new google.maps.Polygon({
-          paths: data[count],
-          strokeColor: '#00ff00',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#99ff99',
-          fillOpacity: 0.35
-        });
-        shape.setMap(map);
         count++;
    }
  }
@@ -46,13 +37,14 @@ function initMap() {
         lngsum/=2;
         destinations[i]= new google.maps.LatLng(latsum, lngsum);
        }
-
   //planning on making this more efficient with API calls when actual data comes in
   //but for testing it will call the API once to get all the information
   for(var i = 0; i < data.length; i++){
     var origin = {lat: 37.444359, lng: -122.159902};
     var destination = new google.maps.LatLng(data[i][0],data[i][1]); //NEED TO DO CALCULATIONS TO GET CENTER
-    var duraton;
+    var duration = 0;
+    var color;
+    var count = 0;
 
     var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
     matrix.getDistanceMatrix({
@@ -65,12 +57,38 @@ function initMap() {
           console.log(status);
           var origins = response.originAddresses;
           var destinations = response.destinationAddresses;
-          for (var i = 0; i < origins.length; i++) {
-            var results = response.rows[i].elements;
+            var results = response.rows[0].elements;
             for (var j = 0; j < results.length; j++) {
-              var duration = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+              var datapoints = data[count];
+              duration = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+              duration = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+
+              if(duration <200){
+                color = "#ff0000";
+              }
+              else if(duration < 350){
+                color = "#66ffff";
+              }
+              else if(duration < 500){
+                color = "#66ff33";
+              }
+              else{
+                color = "#3333cc";
+              }
+              console.log(color);
               console.log(duration);
-            }
+              console.log(datapoints);
+              var shape = new google.maps.Polygon({
+                 paths: datapoints,
+                 strokeColor: color,
+                 strokeOpacity: 0.35,
+                 strokeWeight: 1,
+                 fillColor: color,
+                 fillOpacity: 0.35
+               });
+               shape.setMap(map);
+               console.log(count);
+               count++;
           }
         }
       });
@@ -88,7 +106,7 @@ function initMap() {
   //         console.log(status);
   //         var origins = response.originAddresses;
   //         var destinations = response.destinationAddresses;
-  //         for (var i = 0; i < origins.length; i++) {
+  //         for (var i = 0; i < origins.length; i +) {
   //           var results = response.rows[i].elements;
   //           for (var j = 0; j < results.length; j++) {
   //             console.log(response);
@@ -98,5 +116,6 @@ function initMap() {
   //         }
   //       }
   //     });
+
 
 }
