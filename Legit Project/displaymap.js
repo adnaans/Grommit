@@ -5,19 +5,20 @@ function initMap() {
     mapTypeId: google.maps.MapTypeId.TERRAIN
   });
 
-  var data = [];
+  var regions = [];
   var baseLat = 37.449333, baseLong = -122.173628;
   var endSElat = 37.428431, endSElong = -122.139875, endNElat = 37.468876, endNElong = -122.155271;
   var SElatchange = endSElat - baseLat, SElongchange = endSElong - baseLong;
   var NElatchange = endNElat - baseLat, NElongchange = endNElong - baseLong;
-  var SEdiv = 10, NEdiv = 8, count = 0;
+  var SEdiv = 10, NEdiv = 8
+  var count = 0;
 
   for (var i = 0; i < SEdiv; i++){
     for (var j = 0; j < NEdiv; j++){
        //var color = "#FF0000"; //WE NEED TO DECIDE COLOR SCHEMES BASED ON CORE SECONDS HERE USING THE DURATION VARIABLE
        var startLat = baseLat + (SElatchange * i/SEdiv) + (NElatchange * j/NEdiv);
        var startLong = baseLong + (SElongchange * i/SEdiv) + (NElongchange * j/NEdiv);
-       data[count] = [
+       regions[count] = [
        {lat: startLat, lng: startLong},
        {lat: startLat + (SElatchange/SEdiv), lng: startLong + (SElongchange/SEdiv)},
        {lat: startLat + (SElatchange/SEdiv) + (NElatchange/NEdiv), lng: startLong + (SElongchange/SEdiv) + (NElongchange/NEdiv)},
@@ -29,14 +30,17 @@ function initMap() {
    }
  }
     var destinations = [];
-      for (var i=0;i<data.length;i++){
-        var mat =data[i];
-        var latsum=mat[0][0]+mat[0][1];
-        latsum/=2;
-        var lngsum=mat[1][1]+mat[1][2];
-        lngsum/=2;
-        destinations[i]= new google.maps.LatLng(latsum, lngsum);
+      for (var i=0;i<regions.length;i++){
+        var mat =regions[i];
+        var latsum = mat[0][0] + mat[1][0] + mat[2][0] + mat[3][0];
+        latsum /= 4;
+        var lngsum = mat[0][1] + mat[1][1] + mat[2][1] + mat[3][1];
+        lngsum /= 4;
+        console.log("latsum: " + latsum)
+        console.log("lngsum: " + lngsum)
+        destinations[i] = new google.maps.LatLng(latsum, lngsum);
        }
+
   //planning on making this more efficient with API calls when actual data comes in
   //but for testing it will call the API once to get all the information
   for(var i = 0; i < data.length; i++){
