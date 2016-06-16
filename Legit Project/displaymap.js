@@ -48,6 +48,7 @@ function initMap() {
     var destination = destinations[i];//NEED TO DO CALCULATIONS TO GET CENTER
     var duration = 0;
     var color;
+    var colors = [];
 
     var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
     matrix.getDistanceMatrix({
@@ -66,15 +67,19 @@ function initMap() {
 
         if(duration < 200){
           color = "#ff0000";
+          colors[counter] = color;
         }
         else if(duration < 350){
           color = "#66ffff";
+          colors[counter]=color;
         }
         else if(duration < 500){
           color = "#66ff33";
+          colors[counter]=color;
         }
         else {
           color = "#3333cc";
+          colors[counter]=color;
         }
         // console.log(color);
         // console.log(duration);
@@ -88,6 +93,12 @@ function initMap() {
          fillOpacity: 0.35
        });
         shape.setMap(map);
+        google.maps.event.addListener(shape,"mouseover",function(){
+          this.setOptions({fillColor: "#7723a4"});
+        });
+        google.maps.event.addListener(shape,"mouseout",function(){
+          this.setOptions({fillColor: colors[counter]});
+        })
         // console.log(c);
         counter++;
       }
@@ -123,6 +134,3 @@ function initMap() {
   //       }
   //     });
 }
-
-
-
