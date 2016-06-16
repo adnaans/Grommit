@@ -15,40 +15,39 @@ function initMap() {
 
   for (var i = 0; i < SEdiv; i++){
     for (var j = 0; j < NEdiv; j++){
-       //var color = "#FF0000"; //WE NEED TO DECIDE COLOR SCHEMES BASED ON CORE SECONDS HERE USING THE DURATION VARIABLE
-       var startLat = baseLat + (SElatchange * i/SEdiv) + (NElatchange * j/NEdiv);
-       var startLong = baseLong + (SElongchange * i/SEdiv) + (NElongchange * j/NEdiv);
-       regions[count] = [
-       {lat: startLat, lng: startLong},
-       {lat: startLat + (SElatchange/SEdiv), lng: startLong + (SElongchange/SEdiv)},
-       {lat: startLat + (SElatchange/SEdiv) + (NElatchange/NEdiv), lng: startLong + (SElongchange/SEdiv) + (NElongchange/NEdiv)},
-       {lat: startLat + (NElatchange/NEdiv), lng: startLong + (NElongchange/NEdiv)},
-       {lat: startLat, lng: startLong},
-       ]
-
-        count++;
-   }
- }
-    var destinations = [];
-      for (var i=0;i<regions.length;i++){
-        var mat =regions[i];
-        var latsum = mat[0][0] + mat[1][0] + mat[2][0] + mat[3][0];
-        latsum /= 4;
-        var lngsum = mat[0][1] + mat[1][1] + mat[2][1] + mat[3][1];
-        lngsum /= 4;
-        console.log("latsum: " + latsum)
-        console.log("lngsum: " + lngsum)
-        destinations[i] = new google.maps.LatLng(latsum, lngsum);
-       }
-
+      var startLat = baseLat + (SElatchange * i/SEdiv) + (NElatchange * j/NEdiv);
+      var startLong = baseLong + (SElongchange * i/SEdiv) + (NElongchange * j/NEdiv);
+      regions[count] = [
+      {lat: startLat, lng: startLong},
+      {lat: startLat + (SElatchange/SEdiv), lng: startLong + (SElongchange/SEdiv)},
+      {lat: startLat + (SElatchange/SEdiv) + (NElatchange/NEdiv), lng: startLong + (SElongchange/SEdiv) + (NElongchange/NEdiv)},
+      {lat: startLat + (NElatchange/NEdiv), lng: startLong + (NElongchange/NEdiv)},
+      {lat: startLat, lng: startLong}
+      ]
+      count++;
+    }
+  }
+  var destinations = [];
+  for (var i = 0; i < regions.length; i++){
+    var mat = regions[i];
+    //console.log(mat)
+    var latsum = mat[0]["lat"] + mat[1]["lat"] + mat[2]["lat"] + mat[3]["lat"];
+    latsum /= 4;
+    var lngsum = mat[0]["lng"] + mat[1]["lng"] + mat[2]["lng"] + mat[3]["lng"];
+    lngsum /= 4;
+    //console.log("latsum: " + latsum)
+    //console.log("lngsum: " + lngsum)
+    destinations[i] = new google.maps.LatLng(latsum, lngsum);
+  }
   //planning on making this more efficient with API calls when actual data comes in
   //but for testing it will call the API once to get all the information
-  for(var i = 0; i < data.length; i++){
-    var origin = {lat: 37.444359, lng: -122.159902};
-    var destination = new google.maps.LatLng(data[i][0],data[i][1]); //NEED TO DO CALCULATIONS TO GET CENTER
+  var counter = 0;
+  var origin = {lat: 37.444359, lng: -122.159902};
+
+  for(var i = 0; i < destinations.length; i++){
+    var destination = destinations[i];//NEED TO DO CALCULATIONS TO GET CENTER
     var duration = 0;
     var color;
-    var count = 0;
 
     var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
     matrix.getDistanceMatrix({
@@ -57,45 +56,48 @@ function initMap() {
       travelMode: google.maps.TravelMode.BICYCLING,
       unitSystem: google.maps.UnitSystem.METRIC,
     }, function(response, status) { //upon completion
-        if (status == google.maps.DistanceMatrixStatus.OK) {
-          console.log(status);
-          var origins = response.originAddresses;
-          var destinations = response.destinationAddresses;
-            var results = response.rows[0].elements;
-            for (var j = 0; j < results.length; j++) {
-              var datapoints = data[count];
-              duration = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
-              duration = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+      if (status == google.maps.DistanceMatrixStatus.OK) {
+        // console.log(status);
+        var origins = response.originAddresses;
+        var destinations = response.destinationAddresses;
+        var results = response.rows[0].elements;
+        var datapoints = regions[counter];
+        var duration = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
 
-              if(duration <200){
-                color = "#ff0000";
-              }
-              else if(duration < 350){
-                color = "#66ffff";
-              }
-              else if(duration < 500){
-                color = "#66ff33";
-              }
-              else{
-                color = "#3333cc";
-              }
-              console.log(color);
-              console.log(duration);
-              console.log(datapoints);
-              var shape = new google.maps.Polygon({
-                 paths: datapoints,
-                 strokeColor: color,
-                 strokeOpacity: 0.35,
-                 strokeWeight: 1,
-                 fillColor: color,
-                 fillOpacity: 0.35
-               });
-               shape.setMap(map);
-               console.log(count);
-               count++;
-          }
+        if(duration < 200){
+          color = "#ff0000";
         }
-      });
+        else if(duration < 350){
+          color = "#66ffff";
+        }
+        else if(duration < 500){
+          color = "#66ff33";
+        }
+        else {
+          color = "#3333cc";
+        }
+        // console.log(color);
+        // console.log(duration);
+        // console.log(datapoints);
+        var shape = new google.maps.Polygon({
+         paths: datapoints,
+         strokeColor: color,
+         strokeOpacity: 0.35,
+         strokeWeight: 1,
+         fillColor: color,
+         fillOpacity: 0.35
+       });
+        shape.setMap(map);
+        // console.log(c);
+        counter++;
+      }
+    });
+    //Places a marker on city hall
+    var marker = new google.maps.Marker({
+    position: {lat: 37.444359, lng: -122.159902},
+    map: map,
+    title: 'City Hall'
+  });
   }
   // var origin = new google.maps.LatLng(37.444359, -122.159902);
   // var destination = new google.maps.LatLng(38.000002, -122.000002);
@@ -120,6 +122,7 @@ function initMap() {
   //         }
   //       }
   //     });
-
-
 }
+
+
+
