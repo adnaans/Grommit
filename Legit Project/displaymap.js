@@ -45,7 +45,7 @@ function initMap() {
   var origin = {lat: 37.444359, lng: -122.159902};
 
   for(var i = 0; i < destinations.length; i++){
-    var destination = destinations[i];//NEED TO DO CALCULATIONS TO GET CENTER
+    var destination = destinations[i];
     var duration = 0;
     var color;
     var colors = [];
@@ -71,34 +71,36 @@ function initMap() {
         }
         else if(duration < 350){
           color = "#66ffff";
-          colors[counter]=color;
+          colors[counter] = color;
         }
         else if(duration < 500){
           color = "#66ff33";
-          colors[counter]=color;
+          colors[counter] = color;
         }
         else {
           color = "#3333cc";
-          colors[counter]=color;
+          colors[counter] = color;
         }
         // console.log(color);
         // console.log(duration);
         // console.log(datapoints);
         var shape = new google.maps.Polygon({
          paths: datapoints,
+         tempColor: color,
          strokeColor: color,
          strokeOpacity: 0.35,
          strokeWeight: 1,
          fillColor: color,
          fillOpacity: 0.35
        });
-        shape.setMap(map);
         google.maps.event.addListener(shape,"mouseover",function(){
           this.setOptions({fillColor: "#7723a4"});
         });
         google.maps.event.addListener(shape,"mouseout",function(){
-          this.setOptions({fillColor: colors[counter]});
-        })
+          this.setOptions({fillColor: this.tempColor});
+          console.log(this.tempColor);
+        });
+        shape.setMap(map);
         // console.log(c);
         counter++;
       }
