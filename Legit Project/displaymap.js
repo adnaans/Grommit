@@ -87,17 +87,36 @@ function initMap() {
        fillOpacity: 0.35
      });
 
+      var directionsDisplay = new google.maps.DirectionsRenderer({
+        preserveViewport: true,
+        suppressMarkers: true,
+        suppressBicyclingLayer: true
+      });
+      var directionsService = new google.maps.DirectionsService();
+
       google.maps.event.addListener(shapes[i],"mouseover",function(){
         this.setOptions({fillColor: "#7723a4"});
         this.window.open(map, this);
+        console.log();
+        directionsService.route({
+          origin: this.window.position,
+          destination: destination,
+          travelMode: google.maps.TravelMode.BICYCLING
+        }, function(result, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(result);
+          }
+          directionsDisplay.setMap(map);
+        });
       });
       google.maps.event.addListener(shapes[i],"mouseout",function(){
         this.setOptions({fillColor: this.tempColor});
         this.window.close();
+        directionsDisplay.setMap(null);
       });
       google.maps.event.addListener(shapes[i], "click", function(e){
         //console.log(e.latLng.lat() + ", " + e.latLng.lng());
-
+        destination = e.latLng;
         //marker.setMap(null);
         marker.position = e.latLng;
         marker.setMap(map);
@@ -163,9 +182,16 @@ function calcTime(dest, ori, index, shapes){
     if (status == google.maps.DistanceMatrixStatus.OK) {
       var results = response.rows[0].elements;
       var destin = response.destinationAddresses[0];
-      time = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+      if (typeof(results[0].duration) == 'undefined'){
+        time = -1 
+      } else {
+        time = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+      }
 
-      if(time < 200){
+      if (time < 0){
+        color = "#ababab"
+      }
+      else if(time < 200 ){
         color = "#ff0000";
       }
       else if(time < 350){
@@ -183,7 +209,11 @@ function calcTime(dest, ori, index, shapes){
         strokeColor: color,
         fillColor: color
       });
-      shapes[index].window.setOptions({content: "Biking time from " + destin + ": " + results[0].duration.value});
+      if (time >= 0){
+        shapes[index].window.setOptions({content: "Biking time from " + destin + ": " + results[0].duration.text});
+      } else {
+        shapes[index].window.setOptions({content: "No bike route available"});
+      }
     } else {
       shapes[index].setOptions({
         tempColor: "#000000",
