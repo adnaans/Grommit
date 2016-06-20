@@ -30,7 +30,8 @@ function initMap() {
         count++;
       }
     }
-    var destinations = [];
+
+    var origins = [];
     for (var i = 0; i < regions.length; i++){
       var mat = regions[i];
       //console.log(mat)
@@ -38,108 +39,158 @@ function initMap() {
       latsum /= 4;
       var lngsum = mat[0]["lng"] + mat[1]["lng"] + mat[2]["lng"] + mat[3]["lng"];
       lngsum /= 4;
-      //console.log("latsum: " + latsum)
-      //console.log("lngsum: " + lngsum)
-      destinations[i] = new google.maps.LatLng(latsum, lngsum);
+      origins[i] = new google.maps.LatLng(latsum, lngsum);
     }
     //planning on making this more efficient with API calls when actual data comes in
     //but for testing it will call the API once to get all the information
-    var counter = 0;
-    var origin = {lat: 37.444359, lng: -122.159902};
 
-    for(var i = 0; i < destinations.length; i++){
-      var destination = destinations[i];
-      var duration = 0;
+    var destination = {lat: 37.444359, lng: -122.159902};
+    var shapes = [];
+
+    var marker = new google.maps.Marker({
+      position: destination,
+      map: map,
+      title: 'Destination'
+    });
+
+    google.maps.event.addListener(map, "click", function(e){
+      destination = e.latLng;
+      console.log(destination.lat() + ", " + destination.lng());
+
+      //marker.setMap(null);
+      marker.position = destination;
+      marker.setMap(map);
+
+      for (var i = 0; i < origins.length; i++){
+        calcTime(destination, origins, i, shapes);
+      }
+    });
+
+    var colors = [];
+    var times = [];
+    count = 0;
+
+    for (var i = 0; i < origins.length; i++){
+      var datapoints = regions[i];
+      shapes[i] = new google.maps.Polygon({
+       paths: datapoints,
+       map: map,
+       tempColor: "",
+       window: new google.maps.InfoWindow({
+        content: "Loading...",
+        position: origins[i]
+      }),
+       strokeColor: "",
+       strokeOpacity: 0.35,
+       strokeWeight: 1,
+       fillColor: "",
+       fillOpacity: 0.35
+     });
+
+      google.maps.event.addListener(shapes[i],"mouseover",function(){
+        this.setOptions({fillColor: "#7723a4"});
+        this.window.open(map, this);
+      });
+      google.maps.event.addListener(shapes[i],"mouseout",function(){
+        this.setOptions({fillColor: this.tempColor});
+        this.window.close();
+      });
+      google.maps.event.addListener(shapes[i], "click", function(e){
+        //console.log(e.latLng.lat() + ", " + e.latLng.lng());
+
+        //marker.setMap(null);
+        marker.position = e.latLng;
+        marker.setMap(map);
+
+        for (var j = 0; j < origins.length; j++){
+          calcTime(e.latLng, origins, j, shapes);
+        }
+      });
+
       var color;
-      var colors = [];
-
       var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
       matrix.getDistanceMatrix({
-        origins: [origin],
+        origins: [origins[i]],
         destinations: [destination],
         travelMode: google.maps.TravelMode.BICYCLING,
         unitSystem: google.maps.UnitSystem.METRIC,
       }, function(response, status) { //upon completion
         if (status == google.maps.DistanceMatrixStatus.OK) {
-          var origins = response.originAddresses;
-          var dest = response.destinationAddresses;
-          console.log(destinations[0]);
           var results = response.rows[0].elements;
-          var datapoints = regions[counter];
-          var duration = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+          var destin = response.destinationAddresses[0];
+          times[count] = results[0].duration.text;
+          time = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
 
-          if(duration < 200){
+          if(time < 200){
             color = "#ff0000";
-            colors[counter] = color;
+            colors[count] = color;
           }
-          else if(duration < 350){
+          else if(time < 350){
             color = "#66ffff";
-            colors[counter] = color;
+            colors[count] = color;
           }
-          else if(duration < 500){
+          else if(time < 500){
             color = "#66ff33";
-            colors[counter] = color;
+            colors[count] = color;
           }
           else {
             color = "#3333cc";
-            colors[counter] = color;
+            colors[count] = color;
           }
-          
-          var shape = new google.maps.Polygon({
-           paths: datapoints,
-           tempColor: color,
-           window: new google.maps.InfoWindow({
-            content: "Biking time from Palo Alto City Hall: " + duration + " seconds",
-            position: destinations[counter] //{lat: coordinate.lat(), lng: coordinate.lng()}
-          }),
-           strokeColor: color,
-           strokeOpacity: 0.35,
-           strokeWeight: 1,
-           fillColor: color,
-           fillOpacity: 0.35
-         });
-
-          google.maps.event.addListener(shape,"mouseover",function(){
-            this.setOptions({fillColor: "#7723a4"});
-            this.window.open(map, this)
-          });
-          google.maps.event.addListener(shape,"mouseout",function(){
-            this.setOptions({fillColor: this.tempColor});
-            this.window.close()
-          });
-          shape.setMap(map);
-          counter++;
+          shapes[count].setOptions({
+            tempColor: colors[count],
+            fillColor: colors[count],
+            strokeColor: colors[count]
+          })
+          shapes[count].window.setOptions({content: "Biking time from " + destin + ": " + times[count]})
+          count++;
         }
       });
-      //Places a marker on city hall
-      var marker = new google.maps.Marker({
-        position: {lat: 37.444359, lng: -122.159902},
-        map: map,
-        title: 'City Hall'
-      });
     }
-    // var origin = new google.maps.LatLng(37.444359, -122.159902);
-    // var destination = new google.maps.LatLng(38.000002, -122.000002);
-    // var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
-    //   matrix.getDistanceMatrix({
-    //     origins: [origin],
-    //     destinations: [destination],
-    //     travelMode: google.maps.TravelMode.BICYCLING,
-    //     unitSystem: google.maps.UnitSystem.METRIC,
-    //   }, function(response, status) { //upon completion
-    //       if (status == google.maps.DistanceMatrixStatus.OK) {
-    //         console.log(status);
-    //         var origins = response.originAddresses;
-    //         var destinations = response.destinationAddresses;
-    //         for (var i = 0; i < origins.length; i +) {
-    //           var results = response.rows[i].elements;
-    //           for (var j = 0; j < results.length; j++) {
-    //             console.log(response);
-    //             var duration = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
-    //             console.log(duration);
-    //           }
-    //         }
-    //       }
-    //     });
   }
+}
+function calcTime(dest, ori, index, shapes){
+  var matrix = new google.maps.DistanceMatrixService;
+  matrix.getDistanceMatrix({
+    origins: [ori[index]],
+    destinations: [dest],
+    travelMode: google.maps.TravelMode.BICYCLING,
+    unitSystem: google.maps.UnitSystem.METRIC,
+  }, function(response, status) { //upon completion
+    if (status != google.maps.DistanceMatrixStatus.OK) {
+      console.log(status);
+    }
+    if (status == google.maps.DistanceMatrixStatus.OK) {
+      var results = response.rows[0].elements;
+      var destin = response.destinationAddresses[0];
+      time = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+
+      if(time < 200){
+        color = "#ff0000";
+      }
+      else if(time < 350){
+        color = "#66ffff";
+      }
+      else if(time < 500){
+        color = "#66ff33";
+      }
+      else {
+        color = "#3333cc";
+      }
+
+      shapes[index].setOptions({
+        tempColor: color,
+        strokeColor: color,
+        fillColor: color
+      });
+      shapes[index].window.setOptions({content: "Biking time from " + destin + ": " + results[0].duration.value});
+    } else {
+      shapes[index].setOptions({
+        tempColor: "#000000",
+        strokeColor: "#000000",
+        fillColor: "#000000"
+      });
+      shapes[index].window.setOptions({content: status});
+    }
+  });
 }
