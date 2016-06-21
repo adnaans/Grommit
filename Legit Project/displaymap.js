@@ -8,7 +8,6 @@ function initMap() {
   select.options[2] = new Option("Transit", 2);
   select.options[3] = new Option("Walking", 3);
 
-
   if (load == 2){
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
@@ -94,29 +93,6 @@ function initMap() {
       }
     }
     google.maps.event.addListener(map, "click", function(e){
-      trans = select.options[select.selectedIndex];
-      console.log(displaytext);
-      methodtrans = google.maps.TravelMode.BICYCLING;
-      if(trans.text=="Biking"){
-        methodtrans = google.maps.TravelMode.BICYCLING;
-        displaytext = "Biking";
-      }
-      else if (trans.text == "Driving"){
-        methodtrans = google.maps.TravelMode.DRIVING;
-        displaytext = "Driving";
-      }
-      else if (trans.text == "Transit"){
-        methodtrans = google.maps.TravelMode.TRANSIT;
-        displaytext = "Transit";
-      }
-      else if (trans.text == "Walking"){
-        methodtrans = google.maps.TravelMode.WALKING;
-        displaytext = "Walking";
-      }
-      else {
-        methodtrans = google.maps.TravelMode.DRIVING;
-        displaytext = "Driving";
-      }
       destination = e.latLng;
       console.log(destination.lat() + ", " + destination.lng());
 
@@ -179,31 +155,6 @@ function initMap() {
         directionsDisplay.setMap(null);
       });
       google.maps.event.addListener(shapes[i], "click", function(e){
-        //console.log(e.latLng.lat() + ", " + e.latLng.lng());
-        trans = select.options[select.selectedIndex];
-        console.log(displaytext);
-        methodtrans = google.maps.TravelMode.BICYCLING;
-        if(trans.text=="Biking"){
-          methodtrans = google.maps.TravelMode.BICYCLING;
-          displaytext = "Biking";
-        }
-        else if (trans.text == "Driving"){
-          methodtrans = google.maps.TravelMode.DRIVING;
-          displaytext = "Driving";
-        }
-        else if (trans.text == "Transit"){
-          methodtrans = google.maps.TravelMode.TRANSIT;
-          displaytext = "Transit";
-        }
-        else if (trans.text == "Walking"){
-          methodtrans = google.maps.TravelMode.WALKING;
-          displaytext = "Walking";
-        }
-        else {
-          methodtrans = google.maps.TravelMode.DRIVING;
-          displaytext = "Driving";
-        }
-
         destination = e.latLng;
         //marker.setMap(null);
         marker.position = e.latLng;
