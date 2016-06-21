@@ -1,6 +1,13 @@
 var load = 0
 function initMap() {
   load++
+  var select = document.getElementById("transportation");
+
+  select.options[0] = new Option("Biking", 0);
+  select.options[1] = new Option("Driving", 1);
+  select.options[2] = new Option("Transit", 2);
+  select.options[3] = new Option("Walking", 3);
+
   if (load == 2){
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
@@ -53,7 +60,33 @@ function initMap() {
       title: 'Destination'
     });
 
+    var trans = select.options[select.selectedIndex];
+    var methodtrans = google.maps.TravelMode.DRIVING;;
+    var displaytext = "Biking";
     google.maps.event.addListener(map, "click", function(e){
+      trans = select.options[select.selectedIndex];
+      console.log(displaytext);
+      methodtrans = google.maps.TravelMode.BICYCLING;
+      if(trans.text=="Biking"){
+        methodtrans = google.maps.TravelMode.BICYCLING;
+        displaytext = "Biking";
+      }
+      else if (trans.text == "Driving"){
+        methodtrans = google.maps.TravelMode.DRIVING;
+        displaytext = "Driving";
+      }
+      else if (trans.text == "Transit"){
+        methodtrans = google.maps.TravelMode.TRANSIT;
+        displaytext = "Transit";
+      }
+      else if (trans.text == "Walking"){
+        methodtrans = google.maps.TravelMode.WALKING;
+        displaytext = "Walking";
+      }
+      else {
+        methodtrans = google.maps.TravelMode.DRIVING;
+        displaytext = "Driving";
+      }
       destination = e.latLng;
       console.log(destination.lat() + ", " + destination.lng());
 
@@ -62,8 +95,9 @@ function initMap() {
       marker.setMap(map);
 
       for (var i = 0; i < origins.length; i++){
-        calcTime(destination, origins, i, shapes);
+        calcTime(destination, origins, i, shapes, displaytext, methodtrans);
       }
+
     });
 
     var colors = [];
@@ -101,7 +135,7 @@ function initMap() {
         directionsService.route({
           origin: this.window.position,
           destination: destination,
-          travelMode: google.maps.TravelMode.BICYCLING
+          travelMode: methodtrans
         }, function(result, status) {
           if (status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(result);
@@ -116,13 +150,37 @@ function initMap() {
       });
       google.maps.event.addListener(shapes[i], "click", function(e){
         //console.log(e.latLng.lat() + ", " + e.latLng.lng());
+        trans = select.options[select.selectedIndex];
+        console.log(displaytext);
+        methodtrans = google.maps.TravelMode.BICYCLING;
+        if(trans.text=="Biking"){
+          methodtrans = google.maps.TravelMode.BICYCLING;
+          displaytext = "Biking";
+        }
+        else if (trans.text == "Driving"){
+          methodtrans = google.maps.TravelMode.DRIVING;
+          displaytext = "Driving";
+        }
+        else if (trans.text == "Transit"){
+          methodtrans = google.maps.TravelMode.TRANSIT;
+          displaytext = "Transit";
+        }
+        else if (trans.text == "Walking"){
+          methodtrans = google.maps.TravelMode.WALKING;
+          displaytext = "Walking";
+        }
+        else {
+          methodtrans = google.maps.TravelMode.DRIVING;
+          displaytext = "Driving";
+        }
+
         destination = e.latLng;
         //marker.setMap(null);
         marker.position = e.latLng;
         marker.setMap(map);
 
         for (var j = 0; j < origins.length; j++){
-          calcTime(e.latLng, origins, j, shapes);
+          calcTime(e.latLng, origins, j, shapes, displaytext, methodtrans);
         }
       });
 
@@ -131,7 +189,7 @@ function initMap() {
       matrix.getDistanceMatrix({
         origins: [origins[i]],
         destinations: [destination],
-        travelMode: google.maps.TravelMode.BICYCLING,
+        travelMode: methodtrans,
         unitSystem: google.maps.UnitSystem.METRIC,
       }, function(response, status) { //upon completion
         if (status == google.maps.DistanceMatrixStatus.OK) {
@@ -160,20 +218,20 @@ function initMap() {
             tempColor: colors[count],
             fillColor: colors[count],
             strokeColor: colors[count]
-          })
-          shapes[count].window.setOptions({content: "Biking time from " + destin + ": " + times[count]})
+          });
+          shapes[count].window.setOptions({content: "" + displaytext + " time from " + destin + ": " + times[count]})
           count++;
         }
       });
     }
   }
 }
-function calcTime(dest, ori, index, shapes){
+function calcTime(dest, ori, index, shapes, displaytext, methodtrans){
   var matrix = new google.maps.DistanceMatrixService;
   matrix.getDistanceMatrix({
     origins: [ori[index]],
     destinations: [dest],
-    travelMode: google.maps.TravelMode.BICYCLING,
+    travelMode: methodtrans,
     unitSystem: google.maps.UnitSystem.METRIC,
   }, function(response, status) { //upon completion
     if (status != google.maps.DistanceMatrixStatus.OK) {
@@ -183,7 +241,7 @@ function calcTime(dest, ori, index, shapes){
       var results = response.rows[0].elements;
       var destin = response.destinationAddresses[0];
       if (typeof(results[0].duration) == 'undefined'){
-        time = -1 
+        time = -1
       } else {
         time = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
       }
@@ -210,9 +268,9 @@ function calcTime(dest, ori, index, shapes){
         fillColor: color
       });
       if (time >= 0){
-        shapes[index].window.setOptions({content: "Biking time from " + destin + ": " + results[0].duration.text});
+        shapes[index].window.setOptions({content: displaytext + " time from " + destin + ": " + results[0].duration.text});
       } else {
-        shapes[index].window.setOptions({content: "No bike route available"});
+        shapes[index].window.setOptions({content: "No" + displaytext + " route available"});
       }
     } else {
       shapes[index].setOptions({

@@ -18,9 +18,18 @@
     </style>
   </head>
   <body onload="initMap()">
-    <div id="map" style="width: 1280px; height: 700px;"></div>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-KMiLCLYouSxpDAShEiLr9BNG1uN5TfI&callback=initMap"
-      async defer></script>
-    </div>
+    <table>
+      <row>
+        <div>
+          <p>Select a mode of transportation: <select id="transportation"></select></p>
+        </div>
+      </row>
+      <row>
+        <div id="map" style="width: 1280px; height: 700px;"></div>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-KMiLCLYouSxpDAShEiLr9BNG1uN5TfI&callback=initMap"
+        async defer></script>
+        </div>
+      </row>
+    </table>
   </body>
 </html>
