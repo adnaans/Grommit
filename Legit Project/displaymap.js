@@ -8,6 +8,7 @@ function initMap() {
   select.options[2] = new Option("Transit", 2);
   select.options[3] = new Option("Walking", 3);
 
+
   if (load == 2){
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
@@ -61,8 +62,37 @@ function initMap() {
     });
 
     var trans = select.options[select.selectedIndex];
-    var methodtrans = google.maps.TravelMode.DRIVING;;
+    var methodtrans = google.maps.TravelMode.BICYCLING;
     var displaytext = "Biking";
+
+    select.onchange = function(){
+      trans = select.options[select.selectedIndex];
+      console.log(displaytext);
+      methodtrans = google.maps.TravelMode.BICYCLING;
+      if(trans.text=="Biking"){
+        methodtrans = google.maps.TravelMode.BICYCLING;
+        displaytext = "Biking";
+      }
+      else if (trans.text == "Driving"){
+        methodtrans = google.maps.TravelMode.DRIVING;
+        displaytext = "Driving";
+      }
+      else if (trans.text == "Transit"){
+        methodtrans = google.maps.TravelMode.TRANSIT;
+        displaytext = "Transit";
+      }
+      else if (trans.text == "Walking"){
+        methodtrans = google.maps.TravelMode.WALKING;
+        displaytext = "Walking";
+      }
+      else {
+        methodtrans = google.maps.TravelMode.DRIVING;
+        displaytext = "Driving";
+      }
+      for (var i = 0; i < origins.length; i++){
+        calcTime(destination, origins, i, shapes, displaytext, methodtrans);
+      }
+    }
     google.maps.event.addListener(map, "click", function(e){
       trans = select.options[select.selectedIndex];
       console.log(displaytext);
