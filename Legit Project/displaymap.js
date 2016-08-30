@@ -11,12 +11,12 @@ function initMap() {
   if (load == 2){
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
-      center: {lat: 37.444359, lng: -122.159902},
+      center: {lat: 37.444359, lng: -122.159901},
       mapTypeId: google.maps.MapTypeId.TERRAIN
     });
 
     var regions = [];
-    var baseLat = 37.449333, baseLong = -122.173628;
+    var baseLat = 37.449333, baseLong = -122.173600;
     var endSElat = 37.428431, endSElong = -122.139875, endNElat = 37.468876, endNElong = -122.155271;
     var SElatchange = endSElat - baseLat, SElongchange = endSElong - baseLong;
     var NElatchange = endNElat - baseLat, NElongchange = endNElong - baseLong;
