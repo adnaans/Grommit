@@ -1,6 +1,6 @@
 var load = 0
 function initMap() {
-  load++
+  load++;
   var select = document.getElementById("transportation");
 
   select.options[0] = new Option("Biking", 0);
@@ -207,6 +207,7 @@ function initMap() {
     }
   }
 }
+
 function calcTime(dest, ori, index, shapes, displaytext, methodtrans){
   var matrix = new google.maps.DistanceMatrixService;
   matrix.getDistanceMatrix({
