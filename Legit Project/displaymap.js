@@ -264,3 +264,7 @@ function calcTime(dest, ori, index, shapes, displaytext, methodtrans){
     }
   });
 }
+function test(){
+  var field = document.getElementById("address");
+  console.log(field.value);
+}
