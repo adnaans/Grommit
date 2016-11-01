@@ -9,12 +9,14 @@ function initMap() {
   select.options[3] = new Option("Walking", 3);
 
   if (load == 2){
+    //creates a map
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
       center: {lat: 37.444359, lng: -122.159901},
       mapTypeId: google.maps.MapTypeId.TERRAIN
     });
 
+    //setting up boundary coordinates for each region
     var regions = [];
     var baseLat = 37.449333, baseLong = -122.173600;
     var endSElat = 37.428431, endSElong = -122.139875, endNElat = 37.468876, endNElong = -122.155271;
@@ -38,6 +40,7 @@ function initMap() {
       }
     }
 
+    //obtaining midpoints for each region
     var origins = [];
     for (var i = 0; i < regions.length; i++){
       var mat = regions[i];
@@ -48,50 +51,45 @@ function initMap() {
       lngsum /= 4;
       origins[i] = new google.maps.LatLng(latsum, lngsum);
     }
-    //planning on making this more efficient with API calls when actual data comes in
-    //but for testing it will call the API once to get all the information
 
     var destination = {lat: 37.444359, lng: -122.159902};
     var shapes = [];
 
+    //initializes destination marker
     var marker = new google.maps.Marker({
       position: destination,
       map: map,
       title: 'Destination'
     });
 
+    //code for changing transportation mode via radio buttons
     var trans = select.options[select.selectedIndex];
     var methodtrans = google.maps.TravelMode.BICYCLING;
-    var displaytext = "Biking";
 
     select.onchange = function(){
       trans = select.options[select.selectedIndex];
-      console.log(displaytext);
       methodtrans = google.maps.TravelMode.BICYCLING;
       if(trans.text=="Biking"){
         methodtrans = google.maps.TravelMode.BICYCLING;
-        displaytext = "Biking";
       }
       else if (trans.text == "Driving"){
         methodtrans = google.maps.TravelMode.DRIVING;
-        displaytext = "Driving";
       }
       else if (trans.text == "Transit"){
         methodtrans = google.maps.TravelMode.TRANSIT;
-        displaytext = "Transit";
       }
       else if (trans.text == "Walking"){
         methodtrans = google.maps.TravelMode.WALKING;
-        displaytext = "Walking";
       }
       else {
         methodtrans = google.maps.TravelMode.DRIVING;
-        displaytext = "Driving";
       }
       for (var i = 0; i < origins.length; i++){
-        calcTime(destination, origins, i, shapes, displaytext, methodtrans);
+        calcTime(destination, origins, i, shapes, methodtrans);
       }
     }
+
+    //code for switching marker on MAP click
     google.maps.event.addListener(map, "click", function(e){
       destination = e.latLng;
       console.log(destination.lat() + ", " + destination.lng());
@@ -101,11 +99,12 @@ function initMap() {
       marker.setMap(map);
 
       for (var i = 0; i < origins.length; i++){
-        calcTime(destination, origins, i, shapes, displaytext, methodtrans);
+        calcTime(destination, origins, i, shapes, methodtrans);
       }
 
     });
 
+    //setting regions' colors and display settings
     var colors = [];
     var times = [];
     count = 0;
@@ -127,6 +126,7 @@ function initMap() {
        fillOpacity: 0.35
      });
 
+     //setting up mouseover features (infowindows, route highlight)
       var directionsDisplay = new google.maps.DirectionsRenderer({
         preserveViewport: true,
         suppressMarkers: true,
@@ -154,6 +154,8 @@ function initMap() {
         this.window.close();
         directionsDisplay.setMap(null);
       });
+
+      //code for switching marker location on REGION click
       google.maps.event.addListener(shapes[i], "click", function(e){
         destination = e.latLng;
         //marker.setMap(null);
@@ -161,7 +163,7 @@ function initMap() {
         marker.setMap(map);
 
         for (var j = 0; j < origins.length; j++){
-          calcTime(e.latLng, origins, j, shapes, displaytext, methodtrans);
+          calcTime(e.latLng, origins, j, shapes, methodtrans);
         }
       });
 
@@ -200,7 +202,7 @@ function initMap() {
             fillColor: colors[count],
             strokeColor: colors[count]
           });
-          shapes[count].window.setOptions({content: "" + displaytext + " time from " + destin + ": " + times[count]})
+          shapes[count].window.setOptions({content: "Time from " + destin + ": " + times[count]})
           count++;
         }
       });
@@ -208,7 +210,7 @@ function initMap() {
   }
 }
 
-function calcTime(dest, ori, index, shapes, displaytext, methodtrans){
+function calcTime(dest, ori, index, shapes, methodtrans){
   var matrix = new google.maps.DistanceMatrixService;
   matrix.getDistanceMatrix({
     origins: [ori[index]],
@@ -250,9 +252,9 @@ function calcTime(dest, ori, index, shapes, displaytext, methodtrans){
         fillColor: color
       });
       if (time >= 0){
-        shapes[index].window.setOptions({content: displaytext + " time from " + destin + ": " + results[0].duration.text});
+        shapes[index].window.setOptions({content: "Time from " + destin + ": " + results[0].duration.text});
       } else {
-        shapes[index].window.setOptions({content: "No" + displaytext + " route available"});
+        shapes[index].window.setOptions({content: "No route available"});
       }
     } else {
       shapes[index].setOptions({
