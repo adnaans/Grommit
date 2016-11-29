@@ -96,22 +96,24 @@ function initMap() {
       var destinstemp = destins;
       var timestemp = times;
       for (var j = 0; j < origins.length; j++){
-          var temp = calcTime(e.latLng, origins, j, shapes, displaytext, methodtrans, destinstemp, timestemp, mintime, maxtime);
+          var temp = calcTime(destination, origins, j, shapes, displaytext, methodtrans, destinstemp, timestemp, mintime, maxtime);
           destinstemp = temp[0];
           timestemp = temp[1];
           mintime = temp[2];
           maxtime = temp[3];
+          if(j==origins.x-1){
+            destins = destinstemp;
+            times = timestemp;
+            for (var i = 0; i < origins.length; i++){
+              updateColors(i, displaytext, times, mintime, maxtime, shapes,destins);
+            }
+            resetLegend(mintime, maxtime);
+            mintime=0;
+            maxtime=0;
+            times=new Array(80);
+            destins=new Array(80);
+          }
         }
-        destins = destinstemp;
-        times = timestemp;
-      for (var i = 0; i < origins.length; i++){
-        updateColors(i, displaytext, times, mintime, maxtime, shapes,destins);
-      }
-      resetLegend(mintime, maxtime);
-      mintime=0;
-      maxtime=0;
-      times=new Array(80);
-      destins=new Array(80);
     }
     google.maps.event.addListener(map, "click", function(e){
       destination = e.latLng;
@@ -120,25 +122,28 @@ function initMap() {
       //marker.setMap(null);
       marker.position = destination;
       marker.setMap(map);
-     var destinstemp = destins;
+      var destinstemp = destins;
       var timestemp = times;
+      console.log("click");
       for (var j = 0; j < origins.length; j++){
           var temp = calcTime(e.latLng, origins, j, shapes, displaytext, methodtrans, destinstemp, timestemp, mintime, maxtime);
           destinstemp = temp[0];
           timestemp = temp[1];
           mintime = temp[2];
           maxtime = temp[3];
+          if(j==origins.length-1){
+            destins = destinstemp;
+            times = timestemp;
+            for (var i = 0; i < origins.length; i++){
+              updateColors(i, displaytext, times, mintime, maxtime, shapes,destins);
+            }
+            resetLegend(mintime, maxtime);
+            mintime=0;
+            maxtime=0;
+            times=new Array(80);
+            destins=new Array(80);
+          }
         }
-        destins = destinstemp;
-        times = timestemp;
-      for (var i = 0; i < origins.length; i++){
-        updateColors(i, displaytext, times, mintime, maxtime, shapes,destins);
-      }
-      resetLegend(mintime, maxtime);
-      mintime=0;
-      maxtime=0;
-      times=new Array(80);
-      destins=new Array(80);
     });
 
     var colors = [];
@@ -196,23 +201,29 @@ function initMap() {
         marker.setMap(map);
         var destinstemp = destins;
       var timestemp = times;
+      console.log("startclick");
       for (var j = 0; j < origins.length; j++){
           var temp = calcTime(e.latLng, origins, j, shapes, displaytext, methodtrans, destinstemp, timestemp, mintime, maxtime);
           destinstemp = temp[0];
           timestemp = temp[1];
           mintime = temp[2];
           maxtime = temp[3];
+          if(j==origins.length-1){
+            destins = destinstemp;
+            times = timestemp;
+            for (var i = 0; i < origins.length; i++){
+              updateColors(i, displaytext, times, mintime, maxtime, shapes,destins);
+              if(i==origins.length-1)
+                console.log("endclick");
+            }
+            resetLegend(mintime, maxtime);
+            mintime=0;
+            maxtime=0;
+            times=new Array(80);
+            destins=new Array(80);
+          }
         }
-        destins = destinstemp;
-        times = timestemp;
-        for (var i = 0; i < origins.length; i++){
-        updateColors(i, displaytext, times, mintime, maxtime, shapes,destins);
-      }
-        resetLegend(mintime, maxtime);
-        mintime=0;
-        maxtime=0;
-        times=new Array(80);
-        destins=new Array(80);
+
       });
 
       var color;
@@ -278,6 +289,7 @@ function calcTime(dest, ori, index, shapes, methodtrans, destins, times, mintime
         time = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
       }
       times[index]=time;
+      console.log(time);
       if(maxtime==0)
         maxtime = time;
       else if(maxtime < time)
@@ -328,17 +340,20 @@ function updateColors(index, displaytext, times, mintime, maxtime, shapes){
       shapes[index].window.setOptions({content: status});
       }
     }
-  
+
 
 function resetLegend(mintime, maxtime){
   var firstincrement, secondincrement, thirdincrement, fourthincrement;
   var range = maxtime-mintime;
   firstincrement = "" + mintime + " to " + range/4 + mintime + " minutes";
+  console.log(range);
+  console.log(mintime);
+  console.log(maxtime);
   secondincrement = "" + mintime+ range/4 + " to " + mintime + range/2 + " minutes";
   thirdincrement = "" + mintime + range/2 + " to " + mintime + range*3/4 + " minutes";
   fourthincrement = "" + mintime + range*3/4 + " to " + mintime + maxtime + " minutes" ;
   document.getElementById("firstc").textContent=firstincrement;
-  document.getElementById("secondc").textContent=secondincrement; 
-  document.getElementById("thirdc").textContent=thirdincrement; 
-  document.getElementById("fourthc").textContent=fourthincrement;  
+  document.getElementById("secondc").textContent=secondincrement;
+  document.getElementById("thirdc").textContent=thirdincrement;
+  document.getElementById("fourthc").textContent=fourthincrement;
 }
