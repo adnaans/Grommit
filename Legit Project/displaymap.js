@@ -123,7 +123,8 @@ function initMap() {
        strokeOpacity: 0.35,
        strokeWeight: 1,
        fillColor: "",
-       fillOpacity: 0.35
+       fillOpacity: 0.35,
+       clickable: false
      });
 
      //setting up mouseover features (infowindows, route highlight)
@@ -153,18 +154,6 @@ function initMap() {
         this.setOptions({fillColor: this.tempColor});
         this.window.close();
         directionsDisplay.setMap(null);
-      });
-
-      //code for switching marker location on REGION click
-      google.maps.event.addListener(shapes[i], "click", function(e){
-        destination = e.latLng;
-        //marker.setMap(null);
-        marker.position = e.latLng;
-        marker.setMap(map);
-
-        for (var j = 0; j < origins.length; j++){
-          calcTime(e.latLng, origins, j, shapes, methodtrans);
-        }
       });
 
       var color;
@@ -231,7 +220,7 @@ function calcTime(dest, ori, index, shapes, methodtrans){
       }
 
       if (time < 0){
-        color = "#ababab"
+        color = "#ababab";
       }
       else if(time < 200 ){
         color = "#ff0000";
@@ -266,6 +255,7 @@ function calcTime(dest, ori, index, shapes, methodtrans){
     }
   });
 }
+
 function test(){
   var field = document.getElementById("address");
   console.log(field.value);
