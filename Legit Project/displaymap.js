@@ -1,4 +1,9 @@
 var load = 0
+var origins = [];
+var methodtrans;
+var shapes = [];
+var marker, map;
+
 function initMap() {
   load++;
   var select = document.getElementById("transportation");
@@ -10,7 +15,7 @@ function initMap() {
 
   if (load == 2){
     //creates a map
-    var map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
       center: {lat: 37.444359, lng: -122.159901},
       mapTypeId: google.maps.MapTypeId.TERRAIN
@@ -41,7 +46,6 @@ function initMap() {
     }
 
     //obtaining midpoints for each region
-    var origins = [];
     for (var i = 0; i < regions.length; i++){
       var mat = regions[i];
       //console.log(mat)
@@ -53,10 +57,9 @@ function initMap() {
     }
 
     var destination = {lat: 37.444359, lng: -122.159902};
-    var shapes = [];
 
     //initializes destination marker
-    var marker = new google.maps.Marker({
+    marker = new google.maps.Marker({
       position: destination,
       map: map,
       title: 'Destination'
@@ -64,7 +67,7 @@ function initMap() {
 
     //code for changing transportation mode via radio buttons
     var trans = select.options[select.selectedIndex];
-    var methodtrans = google.maps.TravelMode.BICYCLING;
+    methodtrans = google.maps.TravelMode.BICYCLING;
 
     select.onchange = function(){
       trans = select.options[select.selectedIndex];
@@ -94,7 +97,6 @@ function initMap() {
       destination = e.latLng;
       console.log(destination.lat() + ", " + destination.lng());
 
-      //marker.setMap(null);
       marker.position = destination;
       marker.setMap(map);
 
@@ -138,7 +140,7 @@ function initMap() {
       google.maps.event.addListener(shapes[i],"mouseover",function(){
         this.setOptions({fillColor: "#7723a4"});
         this.window.open(map, this);
-        console.log();
+        // console.log();
         directionsService.route({
           origin: this.window.position,
           destination: destination,
@@ -256,7 +258,19 @@ function calcTime(dest, ori, index, shapes, methodtrans){
   });
 }
 
-function test(){
-  var field = document.getElementById("address");
-  console.log(field.value);
+function fieldSubmit(){
+  var input = document.getElementById("address");
+  console.log(input.value);
+  var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({address: input.value}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      marker.position = results[0].geometry.location;
+      marker.setMap(map);
+
+      for (var i = 0; i < origins.length; i++){
+        calcTime(results[0].geometry.location, origins, i, shapes, methodtrans);
+      }
+      console.log("calculated");
+    }
+  });
 }
