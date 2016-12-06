@@ -1,6 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #606060;
+}
+li {
+    float: left;
+}
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    font-family: 'Trebuchet MS',Helvetica,sans-serif;
+}
+li a:hover {
+    background-color: #111;
+}
+</style>
+</head>
+<body>
+
+<ul>
+  <li><a class="active" href="map.html">Home</a></li>
+  <li><a href="contact.html">Contact</a></li>
+  <li><a href="about.html">About</a></li>
+</ul>
+<br><br><br><br>
+<head>
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <script src="displaymap.js">
@@ -18,37 +50,64 @@
     </style>
   </head>
   <body onload="initMap()">
+<<<<<<< HEAD
+
+    <!-- <table>
+      <tr>
+        <td> -->
+         <section id="map" style="width: 920px; height: 500px; float: left;"></section>
+=======
     <table>
       <tr>
         <td>
          <div id="map" style="width: 920px; height: 500px; border-color: black; border-style: solid"></div>
+>>>>>>> origin/master
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-KMiLCLYouSxpDAShEiLr9BNG1uN5TfI&callback=initMap"
           async defer></script>
-         </div> 
+        </section>
         </td>
-        <td>  
-          <div style = "width: 300px; border-color: black; border-style: solid">
-          <p>Select a mode of transportation: <select onchange="initMap()" id="transportation"></select>
+        <td>
+          <aside>
+            <style>
+            aside{
+              position:relative;
+              left:50px;
+            }
+            </style>
+          <p style="font-family: 'Trebuchet MS',Helvetica,sans-serif;"> Select a mode of transportation:<select onchange="initMap()" id="transportation"></select>
           </p>
           <p>
             <div style="width: 20px; height: 20px; background: #ff0000; display: inline-block;"></div>
-            <p id="firstc">= 3 1/3 minutes or less</p>
+            <span style="font-family: 'Trebuchet MS', Helvetica, sans-serif">= 3 1/3 minutes or less</span>
           </p>
           <p>
             <div style="width: 20px; height: 20px; background: #66ffff; display: inline-block;"></div>
-             <p id="secondc">= 3 1/3 to 5 5/6 minutes</p>
+             <span style="font-family: 'Trebuchet MS', Helvetica, sans-serif">= 3 1/3 to 5 5/6 minutes</span>
           </p>
           <p>
            <div style="width: 20px; height: 20px; background: #66ff33; display: inline-block;"></div>
-            <p id="thirdc">= 5 5/6 to 8 1/3 minutes or less</p>
+            <span style="font-family: 'Trebuchet MS', Helvetica, sans-serif">= 5 5/6 to 8 1/3 minutes or less</span>
           </p>
           <p>
             <div style="width: 20px; height: 20px; background: #3333cc; display: inline-block;"></div>
-             <p id="fourthc">= more than 8 1/3 minutes </p>
-             </p>
+<<<<<<< HEAD
+             <span style="font-family: 'Trebuchet MS', Helvetica, sans-serif">= more than 8 1/3 minutes</span></p>
+        </aside>
+        <!-- </td>
+      </tr>
+    </table> -->
+
+=======
+             = more than 8 1/3 minutes </p>
         </div>
         </td>
       </tr>
     </table>
+    <div>
+        Destination Address:
+        <input type="text" id = "address">
+        <button onclick="fieldSubmit()"> Place Marker </button>
+    </div>
+>>>>>>> origin/master
   </body>
 </html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <script src="displaymap.js">
+    </script>
+    <meta charset="utf-8">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body onload="initMap()">
+    <table>
+      <tr>
+        <td>
+         <div id="map" style="width: 920px; height: 500px; border-color: black; border-style: solid"></div>
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-KMiLCLYouSxpDAShEiLr9BNG1uN5TfI&callback=initMap"
+          async defer></script>
+         </div>
+        </td>
+        <td>
+          <div style = "width: 300px; border-color: black; border-style: solid">
+          <p>Select a mode of transportation: <select onchange="initMap()" id="transportation"></select>
+          </p>
+          <p>
+            <div style="width: 20px; height: 20px; background: #ff0000; display: inline-block;"></div>
+            = 3 1/3 minutes or less
+          </p>
+          <p>
+            <div style="width: 20px; height: 20px; background: #66ffff; display: inline-block;"></div>
+             = 3 1/3 to 5 5/6 minutes
+          </p>
+          <p>
+           <div style="width: 20px; height: 20px; background: #66ff33; display: inline-block;"></div>
+            = 5 5/6 to 8 1/3 minutes or less
+          </p>
+          <p>
+            <div style="width: 20px; height: 20px; background: #3333cc; display: inline-block;"></div>
+             = more than 8 1/3 minutes </p>
+        </div>
+        </td>
+      </tr>
+    </table>
+    <div>
+        Destination Address:
+        <input type="text" id = "address">
+        <button onclick="fieldSubmit()"> Place Marker </button>
+    </div>
+  </body>
+</html>

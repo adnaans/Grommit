@@ -1,12 +1,19 @@
 var load = 0
+<<<<<<< HEAD
+=======
 var origins = [];
 var methodtrans;
 var shapes = [];
 var marker, map;
+>>>>>>> master
 
 function initMap() {
   load++;
   var select = document.getElementById("transportation");
+  var maxtime=0;
+  var mintime=0;
+  var times=new Array(80);
+  var destins=new Array(80);
 
   select.options[0] = new Option("Biking", 0);
   select.options[1] = new Option("Driving", 1);
@@ -71,6 +78,10 @@ function initMap() {
 
     select.onchange = function(){
       trans = select.options[select.selectedIndex];
+<<<<<<< HEAD
+      console.log("display:"+displaytext);
+=======
+>>>>>>> master
       methodtrans = google.maps.TravelMode.BICYCLING;
       if(trans.text=="Biking"){
         methodtrans = google.maps.TravelMode.BICYCLING;
@@ -87,9 +98,34 @@ function initMap() {
       else {
         methodtrans = google.maps.TravelMode.DRIVING;
       }
+<<<<<<< HEAD
+      var destinstemp = destins;
+      var timestemp = times;
+      mintime=0;
+      maxtime=0;
+      for (var j = 0; j < origins.length; j++){
+          var temp = calcTime(destination, origins, j, shapes, displaytext, methodtrans, destinstemp, timestemp, mintime, maxtime);
+          destinstemp = temp[0];
+          timestemp = temp[1];
+          mintime = temp[2];
+          maxtime = temp[3];
+          console.log(temp);
+          if(j==origins.x-1){
+            destins = destinstemp;
+            times = timestemp;
+            for (var i = 0; i < origins.length; i++){
+              updateColors(i, displaytext, times, mintime, maxtime, shapes,destins);
+            }
+            resetLegend(mintime, maxtime);
+            times=new Array(80);
+            destins=new Array(80);
+          }
+        }
+=======
       for (var i = 0; i < origins.length; i++){
         calcTime(destination, origins, i, shapes, methodtrans);
       }
+>>>>>>> master
     }
 
     //code for switching marker on MAP click
@@ -99,11 +135,36 @@ function initMap() {
 
       marker.position = destination;
       marker.setMap(map);
+<<<<<<< HEAD
+      var destinstemp = destins;
+      var timestemp = times;
+      console.log("click");
+      mintime=0;
+      maxtime=0;
+      for (var j = 0; j < origins.length; j++){
+          var temp = calcTime(e.latLng, origins, j, shapes, displaytext, methodtrans, destinstemp, timestemp, mintime, maxtime);
+          destinstemp = temp[0];
+          timestemp = temp[1];
+          mintime = temp[2];
+          maxtime = temp[3];
+          if(j==origins.length-1){
+            destins = destinstemp;
+            times = timestemp;
+            for (var i = 0; i < origins.length; i++){
+              updateColors(i, displaytext, times, mintime, maxtime, shapes,destins);
+            }
+            resetLegend(mintime, maxtime);
+            times=new Array(80);
+            destins=new Array(80);
+          }
+        }
+=======
 
       for (var i = 0; i < origins.length; i++){
         calcTime(destination, origins, i, shapes, methodtrans);
       }
 
+>>>>>>> master
     });
 
     //setting regions' colors and display settings
@@ -157,6 +218,41 @@ function initMap() {
         this.window.close();
         directionsDisplay.setMap(null);
       });
+<<<<<<< HEAD
+      google.maps.event.addListener(shapes[i], "click", function(e){
+        destination = e.latLng;
+        //marker.setMap(null);
+        marker.position = e.latLng;
+        marker.setMap(map);
+        var destinstemp = destins;
+      var timestemp = times;
+      console.log("startclick");
+      mintime=0;
+      maxtime=0;
+      for (var j = 0; j < origins.length; j++){
+          var temp = calcTime(e.latLng, origins, j, shapes, displaytext, methodtrans, destinstemp, timestemp, mintime, maxtime);
+          destinstemp = temp[0];
+          timestemp = temp[1];
+          mintime = temp[2];
+          maxtime = temp[3];
+          console.log(temp);
+          if(j==origins.length-1){
+            destins = destinstemp;
+            times = timestemp;
+            for (var i = 0; i < origins.length; i++){
+              updateColors(i, displaytext, times, mintime, maxtime, shapes,destins);
+              if(i==origins.length-1)
+                console.log("endclick");
+            }
+            resetLegend(mintime, maxtime);
+            times=new Array(80);
+            destins=new Array(80);
+          }
+        }
+
+      });
+=======
+>>>>>>> master
 
       var color;
       var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
@@ -200,42 +296,69 @@ function initMap() {
     }
   }
 }
+<<<<<<< HEAD
+function calcTime(dest, ori, index, shapes, methodtrans, destins, times, mintime, maxtime){
+  console.log("calcmin"+mintime);
+=======
 
 function calcTime(dest, ori, index, shapes, methodtrans){
+>>>>>>> master
   var matrix = new google.maps.DistanceMatrixService;
   matrix.getDistanceMatrix({
     origins: [ori[index]],
     destinations: [dest],
-    travelMode: methodtrans,
+    travelMode: google.maps.TravelMode.BICYCLING,
     unitSystem: google.maps.UnitSystem.METRIC,
   }, function(response, status) { //upon completion
     if (status != google.maps.DistanceMatrixStatus.OK) {
-      console.log(status);
+      console.log("status:"+status);
     }
     if (status == google.maps.DistanceMatrixStatus.OK) {
       var results = response.rows[0].elements;
       var destin = response.destinationAddresses[0];
+      destins[index]=destin;
       if (typeof(results[0].duration) == 'undefined'){
-        time = -1
+        time = -1;
       } else {
         time = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+        console.log("array?"+time);
       }
-
+      times[index]=time;
+      console.log("time:"+time);
+      if(maxtime==0){
+        maxtime = time;
+        mintime = time;
+      }
+      else if(maxtime < time)
+        maxtime = time;
+      if(mintime > time)
+        mintime = time;
+  }});
+  return [destins, times, mintime, maxtime];
+  }
+function updateColors(index, displaytext, times, mintime, maxtime, shapes){
+      var time = times[index];
       if (time < 0){
         color = "#ababab";
       }
-      else if(time < 200 ){
+      else if(time < mintime+(maxtime-mintime)/4){
         color = "#ff0000";
       }
-      else if(time < 350){
+      else if(time < mintime+(maxtime-mintime)/4){
         color = "#66ffff";
       }
-      else if(time < 500){
+      else if(time < mintime+(maxtime-mintime)*3/4){
         color = "#66ff33";
       }
       else {
         color = "#3333cc";
       }
+      if(maxtime==0)
+        maxtime = time;
+      else if(maxtime < time)
+        maxtime = time;
+      if(mintime > time)
+        mintime = 0;
 
       shapes[index].setOptions({
         tempColor: color,
@@ -243,19 +366,42 @@ function calcTime(dest, ori, index, shapes, methodtrans){
         fillColor: color
       });
       if (time >= 0){
+<<<<<<< HEAD
+        shapes[index].window.setOptions({content: displaytext + " time from " + destins[index] + ": " + results[0].duration.text});
+      } else {
+        shapes[index].window.setOptions({content: "No" + displaytext + " route available"});
+        shapes[index].setOptions({
+=======
         shapes[index].window.setOptions({content: "Time from " + destin + ": " + results[0].duration.text});
       } else {
         shapes[index].window.setOptions({content: "No route available"});
       }
     } else {
       shapes[index].setOptions({
+>>>>>>> master
         tempColor: "#000000",
         strokeColor: "#000000",
         fillColor: "#000000"
       });
       shapes[index].window.setOptions({content: status});
+      }
     }
-  });
+
+
+function resetLegend(mintime, maxtime){
+  var firstincrement, secondincrement, thirdincrement, fourthincrement;
+  var range = maxtime-mintime;
+  firstincrement = "" + mintime + " to " + range/4 + mintime + " minutes";
+  console.log("range:"+range);
+  console.log("min:"+mintime);
+  console.log("max:"+maxtime);
+  secondincrement = "" + mintime+ range/4 + " to " + mintime + range/2 + " minutes";
+  thirdincrement = "" + mintime + range/2 + " to " + mintime + range*3/4 + " minutes";
+  fourthincrement = "" + mintime + range*3/4 + " to " + mintime + maxtime + " minutes" ;
+  document.getElementById("firstc").textContent=firstincrement;
+  document.getElementById("secondc").textContent=secondincrement;
+  document.getElementById("thirdc").textContent=thirdincrement;
+  document.getElementById("fourthc").textContent=fourthincrement;
 }
 
 function fieldSubmit(){
