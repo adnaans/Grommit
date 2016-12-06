@@ -87,9 +87,7 @@ function initMap() {
       else {
         methodtrans = google.maps.TravelMode.DRIVING;
       }
-      for (var i = 0; i < origins.length; i++){
-        calcTime(destination, origins, i, shapes, methodtrans);
-      }
+      resetMap(destination, origins, shapes, methodtrans);
     }
 
     //code for switching marker on MAP click
@@ -100,9 +98,7 @@ function initMap() {
       marker.position = destination;
       marker.setMap(map);
 
-      for (var i = 0; i < origins.length; i++){
-        calcTime(destination, origins, i, shapes, methodtrans);
-      }
+      resetMap(destination, origins, shapes, methodtrans);
 
     });
 
@@ -157,47 +153,8 @@ function initMap() {
         this.window.close();
         directionsDisplay.setMap(null);
       });
-
-      var color;
-      var matrix = new google.maps.DistanceMatrixService; //Making distance matrix
-      matrix.getDistanceMatrix({
-        origins: [origins[i]],
-        destinations: [destination],
-        travelMode: methodtrans,
-        unitSystem: google.maps.UnitSystem.METRIC,
-      }, function(response, status) { //upon completion
-        if (status == google.maps.DistanceMatrixStatus.OK) {
-          var results = response.rows[0].elements;
-          var destin = response.destinationAddresses[0];
-          times[count] = results[0].duration.text;
-          time = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
-
-          if(time < 200){
-            color = "#ff0000";
-            colors[count] = color;
-          }
-          else if(time < 350){
-            color = "#66ffff";
-            colors[count] = color;
-          }
-          else if(time < 500){
-            color = "#66ff33";
-            colors[count] = color;
-          }
-          else {
-            color = "#3333cc";
-            colors[count] = color;
-          }
-          shapes[count].setOptions({
-            tempColor: colors[count],
-            fillColor: colors[count],
-            strokeColor: colors[count]
-          });
-          shapes[count].window.setOptions({content: "Time from " + destin + ": " + times[count]})
-          count++;
-        }
-      });
     }
+    resetMap(destination, origins, shapes, methodtrans)
   }
 }
 
@@ -274,3 +231,9 @@ function fieldSubmit(){
     }
   });
 }
+
+  function resetMap(destination, origins, shapes, methodtrans){
+    for (var i = 0; i < origins.length; i++){
+      calcTime(destination, origins, i, shapes, methodtrans);
+    }
+  }
