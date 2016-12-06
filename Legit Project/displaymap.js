@@ -71,7 +71,7 @@ function initMap() {
 
     select.onchange = function(){
       trans = select.options[select.selectedIndex];
-      console.log(displaytext);
+      console.log("display:"+displaytext);
       methodtrans = google.maps.TravelMode.BICYCLING;
       if(trans.text=="Biking"){
         methodtrans = google.maps.TravelMode.BICYCLING;
@@ -95,12 +95,15 @@ function initMap() {
       }
       var destinstemp = destins;
       var timestemp = times;
+      mintime=0;
+      maxtime=0;
       for (var j = 0; j < origins.length; j++){
           var temp = calcTime(destination, origins, j, shapes, displaytext, methodtrans, destinstemp, timestemp, mintime, maxtime);
           destinstemp = temp[0];
           timestemp = temp[1];
           mintime = temp[2];
           maxtime = temp[3];
+          console.log(temp);
           if(j==origins.x-1){
             destins = destinstemp;
             times = timestemp;
@@ -108,8 +111,6 @@ function initMap() {
               updateColors(i, displaytext, times, mintime, maxtime, shapes,destins);
             }
             resetLegend(mintime, maxtime);
-            mintime=0;
-            maxtime=0;
             times=new Array(80);
             destins=new Array(80);
           }
@@ -125,6 +126,8 @@ function initMap() {
       var destinstemp = destins;
       var timestemp = times;
       console.log("click");
+      mintime=0;
+      maxtime=0;
       for (var j = 0; j < origins.length; j++){
           var temp = calcTime(e.latLng, origins, j, shapes, displaytext, methodtrans, destinstemp, timestemp, mintime, maxtime);
           destinstemp = temp[0];
@@ -138,8 +141,6 @@ function initMap() {
               updateColors(i, displaytext, times, mintime, maxtime, shapes,destins);
             }
             resetLegend(mintime, maxtime);
-            mintime=0;
-            maxtime=0;
             times=new Array(80);
             destins=new Array(80);
           }
@@ -202,12 +203,15 @@ function initMap() {
         var destinstemp = destins;
       var timestemp = times;
       console.log("startclick");
+      mintime=0;
+      maxtime=0;
       for (var j = 0; j < origins.length; j++){
           var temp = calcTime(e.latLng, origins, j, shapes, displaytext, methodtrans, destinstemp, timestemp, mintime, maxtime);
           destinstemp = temp[0];
           timestemp = temp[1];
           mintime = temp[2];
           maxtime = temp[3];
+          console.log(temp);
           if(j==origins.length-1){
             destins = destinstemp;
             times = timestemp;
@@ -217,8 +221,6 @@ function initMap() {
                 console.log("endclick");
             }
             resetLegend(mintime, maxtime);
-            mintime=0;
-            maxtime=0;
             times=new Array(80);
             destins=new Array(80);
           }
@@ -269,6 +271,7 @@ function initMap() {
   }
 }
 function calcTime(dest, ori, index, shapes, methodtrans, destins, times, mintime, maxtime){
+  console.log("calcmin"+mintime);
   var matrix = new google.maps.DistanceMatrixService;
   matrix.getDistanceMatrix({
     origins: [ori[index]],
@@ -277,21 +280,24 @@ function calcTime(dest, ori, index, shapes, methodtrans, destins, times, mintime
     unitSystem: google.maps.UnitSystem.METRIC,
   }, function(response, status) { //upon completion
     if (status != google.maps.DistanceMatrixStatus.OK) {
-      console.log(status);
+      console.log("status:"+status);
     }
     if (status == google.maps.DistanceMatrixStatus.OK) {
       var results = response.rows[0].elements;
       var destin = response.destinationAddresses[0];
       destins[index]=destin;
       if (typeof(results[0].duration) == 'undefined'){
-        time = -1
+        time = -1;
       } else {
         time = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
+        console.log("array?"+time);
       }
       times[index]=time;
-      console.log(time);
-      if(maxtime==0)
+      console.log("time:"+time);
+      if(maxtime==0){
         maxtime = time;
+        mintime = time;
+      }
       else if(maxtime < time)
         maxtime = time;
       if(mintime > time)
@@ -346,9 +352,9 @@ function resetLegend(mintime, maxtime){
   var firstincrement, secondincrement, thirdincrement, fourthincrement;
   var range = maxtime-mintime;
   firstincrement = "" + mintime + " to " + range/4 + mintime + " minutes";
-  console.log(range);
-  console.log(mintime);
-  console.log(maxtime);
+  console.log("range:"+range);
+  console.log("min:"+mintime);
+  console.log("max:"+maxtime);
   secondincrement = "" + mintime+ range/4 + " to " + mintime + range/2 + " minutes";
   thirdincrement = "" + mintime + range/2 + " to " + mintime + range*3/4 + " minutes";
   fourthincrement = "" + mintime + range*3/4 + " to " + mintime + maxtime + " minutes" ;
