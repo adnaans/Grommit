@@ -7,7 +7,7 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: #606060;
 }
 
 li {
@@ -19,7 +19,7 @@ li a {
     color: white;
     text-align: center;
     padding: 14px 16px;
-    text-decoration: none;
+    font-family: 'Trebuchet MS',Helvetica,sans-serif;
 }
 
 li a:hover {
@@ -34,10 +34,8 @@ li a:hover {
   <li><a href="contact.html">Contact</a></li>
   <li><a href="about.html">About</a></li>
 </ul>
-
-</body>
-
-  <head>
+<br><br><br><br>
+<head>
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <script src="displaymap.js">
@@ -55,36 +53,44 @@ li a:hover {
     </style>
   </head>
   <body onload="initMap()">
+
     <!-- <table>
       <tr>
         <td> -->
-         <div id="map" style="width: 920px; height: 500px; border-color: black; border-style: solid"></div>
+         <section id="map" style="width: 920px; height: 500px; float: left;"></section>
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-KMiLCLYouSxpDAShEiLr9BNG1uN5TfI&callback=initMap"
           async defer></script>
-         </div>
+        </section>
         </td>
         <td>
-          <div style = "width: 300px; border-color: black; border-style: solid">
-          <p>Select a mode of transportation: <select onchange="initMap()" id="transportation"></select>
+          <aside>
+            <style>
+            aside{
+              position:relative;
+              left:50px;
+            }
+            </style>
+          <p style="font-family: 'Trebuchet MS',Helvetica,sans-serif;"> Select a mode of transportation:<select onchange="initMap()" id="transportation"></select>
           </p>
           <p>
             <div style="width: 20px; height: 20px; background: #ff0000; display: inline-block;"></div>
-            = 3 1/3 minutes or less
+            <span style="font-family: 'Trebuchet MS', Helvetica, sans-serif">= 3 1/3 minutes or less</span>
           </p>
           <p>
             <div style="width: 20px; height: 20px; background: #66ffff; display: inline-block;"></div>
-             = 3 1/3 to 5 5/6 minutes
+             <span style="font-family: 'Trebuchet MS', Helvetica, sans-serif">= 3 1/3 to 5 5/6 minutes</span>
           </p>
           <p>
            <div style="width: 20px; height: 20px; background: #66ff33; display: inline-block;"></div>
-            = 5 5/6 to 8 1/3 minutes or less
+            <span style="font-family: 'Trebuchet MS', Helvetica, sans-serif">= 5 5/6 to 8 1/3 minutes or less</span>
           </p>
           <p>
             <div style="width: 20px; height: 20px; background: #3333cc; display: inline-block;"></div>
-             = more than 8 1/3 minutes </p>
-        </div>
+             <span style="font-family: 'Trebuchet MS', Helvetica, sans-serif">= more than 8 1/3 minutes</span></p>
+        </aside>
         <!-- </td>
       </tr>
     </table> -->
+
   </body>
 </html>
