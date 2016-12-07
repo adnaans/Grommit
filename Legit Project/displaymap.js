@@ -48,7 +48,6 @@ function initMap() {
     //obtaining midpoints for each region
     for (var i = 0; i < regions.length; i++){
       var mat = regions[i];
-      //console.log(mat)
       var latsum = mat[0]["lat"] + mat[1]["lat"] + mat[2]["lat"] + mat[3]["lat"];
       latsum /= 4;
       var lngsum = mat[0]["lng"] + mat[1]["lng"] + mat[2]["lng"] + mat[3]["lng"];
@@ -166,12 +165,10 @@ function calcTime(dest, ori, index, shapes, methodtrans, times){
     destinations: [dest],
     travelMode: methodtrans,
     unitSystem: google.maps.UnitSystem.METRIC,
-  }, function(response, status) {
-    console.log(index);//upon completion
+  }, function(response, status) {//upon completion
     if (status != google.maps.DistanceMatrixStatus.OK) {
       console.log(status);
       times[index]=-1;
-      console.log("index"+index);
       if(calcTimeDone(times)){
         console.log(times);
         calcValues(times);
@@ -216,12 +213,10 @@ function fieldSubmit(){
     var times = new Array(80);
     for (var i = 0; i < origins.length; i++){
       calcTime(destination, origins, i, shapes, methodtrans, times);
-      console.log(i);
     }
   }
   function calcTimeDone(arr){
     var count=0;
-    console.log(arr);
     for(var i = 0;i < arr.length;i++){
       if(arr[i]!=null){
         count++;
@@ -231,7 +226,6 @@ function fieldSubmit(){
       return true;
     }
     else {
-      console.log("count"+count);
       return false;
     }
   }
@@ -241,10 +235,10 @@ function fieldSubmit(){
     secondincrement = "" + (mintime+ range/4) + " to " + (mintime + range/2) + " minutes";
     thirdincrement = "" + (mintime + range/2) + " to " + (mintime + range*3/4) + " minutes";
     fourthincrement = "" + (mintime + range*3/4) + " to " + (mintime + range) + " minutes" ;
-    //console.log(firstincrement);
-    //console.log(secondincrement);
-    //console.log(thirdincrement);
-    //console.log(fourthincrement);
+    console.log(firstincrement);
+    console.log(secondincrement);
+    console.log(thirdincrement);
+    console.log(fourthincrement);
     document.getElementById("first").innerHTML=firstincrement;
     document.getElementById("second").innerHTML=secondincrement;
     document.getElementById("third").innerHTML=thirdincrement;
@@ -253,7 +247,6 @@ function fieldSubmit(){
   function updateColors(times, mintime, maxtime, range, destins){
     for(var i = 0; i< times.length; i++){
       var time = times[i]/60;
-      console.log("dis:"+time);
       if (time==undefined || time < 0){
         color = "#ababab";
       }
@@ -300,7 +293,6 @@ function calcValues(times){
   mintime=mintime/60;
   maxtime=maxtime/60;
   range=maxtime-mintime;
-  //console.log(times);
   updateColors(times, mintime, maxtime, range);
   resetLegend(mintime, maxtime, range);
 }
