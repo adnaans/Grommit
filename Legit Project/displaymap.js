@@ -121,7 +121,7 @@ function initMap() {
        strokeWeight: 1,
        fillColor: "",
        fillOpacity: 0.35,
-       clickable: false
+       //clickable: false
      });
 
      //setting up mouseover features (infowindows, route highlight)
@@ -231,11 +231,10 @@ function fieldSubmit(){
   }
   function resetLegend(mintime, maxtime, range){
     var firstincrement, secondincrement, thirdincrement, fourthincrement;
-    var m
-    firstincrement = "" + mintime + " to " + (range/4 + mintime) + " minutes";
-    secondincrement = "" + (mintime+ range/4) + " to " + (mintime + range/2) + " minutes";
-    thirdincrement = "" + (mintime + range/2) + " to " + (mintime + range*3/4) + " minutes";
-    fourthincrement = "" + (mintime + range*3/4) + " to " + (mintime + range) + " minutes" ;
+    firstincrement = "" + timeToWords(mintime) + " to " + timeToWords(range/4 + mintime);
+    secondincrement = "" + timeToWords(mintime+ range/4) + " to " + timeToWords(mintime + range/2);
+    thirdincrement = "" + timeToWords(mintime + range/2) + " to " + timeToWords(mintime + range*3/4);
+    fourthincrement = "" + timeToWords(mintime + range*3/4) + " to " + timeToWords(mintime + range);
     console.log(firstincrement);
     console.log(secondincrement);
     console.log(thirdincrement);
@@ -246,7 +245,14 @@ function fieldSubmit(){
     document.getElementById("fourth").innerHTML=fourthincrement;
   }
   function timeToWords(time){
-
+    var minutes = Math.floor(time/60)
+    var seconds = (time%60);
+    if(minutes>0){
+      return (minutes + " minutes and " + seconds + " seconds");
+    }
+    else{
+      return (seconds + " seconds");
+    }
   }
   function updateColors(times, mintime, maxtime, range, destins){
     for(var i = 0; i< times.length; i++){
@@ -273,11 +279,10 @@ function fieldSubmit(){
         fillColor: color
       });
       if (time >= 0){
-        shapes[i].window.setOptions({content: "Time from " + origins[i] + ": " + timetoWords(time)});
+        shapes[i].window.setOptions({content: "Time to destination: " + timeToWords(time)});
       } else {
         shapes[i].window.setOptions({content: "No route available"});
       }
-      shapes[i].window.setOptions({content: status});
     }
   }
 function calcValues(times){
