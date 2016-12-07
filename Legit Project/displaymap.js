@@ -166,9 +166,16 @@ function calcTime(dest, ori, index, shapes, methodtrans, times){
     destinations: [dest],
     travelMode: methodtrans,
     unitSystem: google.maps.UnitSystem.METRIC,
-  }, function(response, status) { //upon completion
+  }, function(response, status) {
+    console.log(index);//upon completion
     if (status != google.maps.DistanceMatrixStatus.OK) {
       console.log(status);
+      times[index]=-1;
+      console.log("index"+index);
+      if(calcTimeDone(times)){
+        console.log(times);
+        calcValues(times);
+      }
     }
     if (status == google.maps.DistanceMatrixStatus.OK) {
       var results = response.rows[0].elements;
@@ -179,14 +186,11 @@ function calcTime(dest, ori, index, shapes, methodtrans, times){
         time = results[0].duration.value; //Goes to location and stores value of seconds into duration variable]
         }
       times[index]=time;
-      if(calcTimeDone(times)==true){
-        times[index]=time;
+      if(calcTimeDone(times)){
         console.log(times);
         calcValues(times);
       }
     }
-    console.log("time:"+time);
-    return time;
   });
 }
 
@@ -202,7 +206,7 @@ function fieldSubmit(){
       for (var i = 0; i < origins.length; i++){
         calcTime(results[0].geometry.location, origins, i, shapes, methodtrans);
       }
-      console.log("calculated");
+      //console.log("calculated");
     }
   });
 }
@@ -211,12 +215,13 @@ function fieldSubmit(){
     var timetemp;
     var times = new Array(80);
     for (var i = 0; i < origins.length; i++){
-      times[i] = calcTime(destination, origins, i, shapes, methodtrans, times);
-      console.log(times[i]);
+      calcTime(destination, origins, i, shapes, methodtrans, times);
+      console.log(i);
     }
   }
   function calcTimeDone(arr){
     var count=0;
+    console.log(arr);
     for(var i = 0;i < arr.length;i++){
       if(arr[i]!=null){
         count++;
@@ -226,6 +231,7 @@ function fieldSubmit(){
       return true;
     }
     else {
+      console.log("count"+count);
       return false;
     }
   }
@@ -235,10 +241,10 @@ function fieldSubmit(){
     secondincrement = "" + (mintime+ range/4) + " to " + (mintime + range/2) + " minutes";
     thirdincrement = "" + (mintime + range/2) + " to " + (mintime + range*3/4) + " minutes";
     fourthincrement = "" + (mintime + range*3/4) + " to " + (mintime + range) + " minutes" ;
-    console.log(firstincrement);
-    console.log(secondincrement);
-    console.log(thirdincrement);
-    console.log(fourthincrement);
+    //console.log(firstincrement);
+    //console.log(secondincrement);
+    //console.log(thirdincrement);
+    //console.log(fourthincrement);
     document.getElementById("first").innerHTML=firstincrement;
     document.getElementById("second").innerHTML=secondincrement;
     document.getElementById("third").innerHTML=thirdincrement;
@@ -247,6 +253,7 @@ function fieldSubmit(){
   function updateColors(times, mintime, maxtime, range, destins){
     for(var i = 0; i< times.length; i++){
       var time = times[i]/60;
+      console.log("dis:"+time);
       if (time==undefined || time < 0){
         color = "#ababab";
       }
@@ -293,6 +300,7 @@ function calcValues(times){
   mintime=mintime/60;
   maxtime=maxtime/60;
   range=maxtime-mintime;
+  //console.log(times);
   updateColors(times, mintime, maxtime, range);
   resetLegend(mintime, maxtime, range);
 }
