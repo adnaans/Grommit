@@ -231,6 +231,7 @@ function fieldSubmit(){
   }
   function resetLegend(mintime, maxtime, range){
     var firstincrement, secondincrement, thirdincrement, fourthincrement;
+    var m
     firstincrement = "" + mintime + " to " + (range/4 + mintime) + " minutes";
     secondincrement = "" + (mintime+ range/4) + " to " + (mintime + range/2) + " minutes";
     thirdincrement = "" + (mintime + range/2) + " to " + (mintime + range*3/4) + " minutes";
@@ -244,9 +245,12 @@ function fieldSubmit(){
     document.getElementById("third").innerHTML=thirdincrement;
     document.getElementById("fourth").innerHTML=fourthincrement;
   }
+  function timeToWords(time){
+
+  }
   function updateColors(times, mintime, maxtime, range, destins){
     for(var i = 0; i< times.length; i++){
-      var time = times[i]/60;
+      var time = times[i]
       if (time==undefined || time < 0){
         color = "#ababab";
       }
@@ -269,7 +273,7 @@ function fieldSubmit(){
         fillColor: color
       });
       if (time >= 0){
-        shapes[i].window.setOptions({content: "Time from " + origins[i] + ": " + (time/60) + "minutes"});
+        shapes[i].window.setOptions({content: "Time from " + origins[i] + ": " + timetoWords(time)});
       } else {
         shapes[i].window.setOptions({content: "No route available"});
       }
@@ -290,8 +294,6 @@ function calcValues(times){
       maxtime=times[i];
     }
   }
-  mintime=mintime/60;
-  maxtime=maxtime/60;
   range=maxtime-mintime;
   updateColors(times, mintime, maxtime, range);
   resetLegend(mintime, maxtime, range);
