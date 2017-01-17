@@ -152,6 +152,16 @@ function initMap() {
         this.window.close();
         directionsDisplay.setMap(null);
       });
+      google.maps.event.addListener(shapes[i], "click", function(e){
+        destination = e.latLng;
+        // console.log(destination.lat() + ", " + destination.lng());
+
+        marker.position = destination;
+        marker.setMap(map);
+
+        resetMap(destination, origins, shapes, methodtrans);
+
+      });
     }
     resetMap(destination, origins, shapes, methodtrans)
   }
@@ -232,7 +242,7 @@ function fieldSubmit(){
   function resetLegend(mintime, maxtime, range){
     var firstincrement, secondincrement, thirdincrement, fourthincrement;
     firstincrement = "" + timeToWords(mintime) + " to " + timeToWords(range/4 + mintime);
-    secondincrement = "" + timeToWords(mintime+ range/4) + " to " + timeToWords(mintime + range/2);
+    secondincrement = "" + timeToWords(mintime + range/4) + " to " + timeToWords(mintime + range/2);
     thirdincrement = "" + timeToWords(mintime + range/2) + " to " + timeToWords(mintime + range*3/4);
     fourthincrement = "" + timeToWords(mintime + range*3/4) + " to " + timeToWords(mintime + range);
     console.log(firstincrement);
