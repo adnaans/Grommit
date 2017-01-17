@@ -41,19 +41,24 @@
 .third {
   background: green;
   position: relative;
-  height: 100px;
+  height: 300px;
   width: 100%;
-  top: 475px;
+  top: 440px;
 
 }
 .key{
   position: absolute;
-  height: 100px;
-  width: 500px;
+  height: 300px;
+  width: 30%;
   top: 0;
-  left: 1000px;
+  left: calc(100% - 30%);
   border: 1px solid blue
 }
 .map{
+  position: relative;
+  height: 300px;
+  width: 70%;
+  top: 0;
+  border: 1px solid red
 
 }

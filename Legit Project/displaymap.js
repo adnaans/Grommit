@@ -317,7 +317,7 @@ function calcValues(times){
       mintime=times[i];
       maxtime=times[i];
     }
-    else if(times[i]<mintime){
+    else if(times[i]<mintime && times[i]>0){
       mintime=times[i];
     }
     else if(times[i]>maxtime){
