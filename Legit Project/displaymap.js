@@ -60,8 +60,19 @@ function initMap() {
     //initializes destination marker
     marker = new google.maps.Marker({
       position: destination,
+      window: new google.maps.InfoWindow({
+       content: destination.lat + ", " + destination.lng,
+       position: destination
+     }),
       map: map,
       title: 'Destination'
+    });
+    google.maps.event.addListener(marker,"mouseover",function(){
+      this.window.open(map, this);
+      // console.log();
+    });
+    google.maps.event.addListener(marker,"mouseout",function(){
+      this.window.close();
     });
 
     //code for changing transportation mode via radio buttons
