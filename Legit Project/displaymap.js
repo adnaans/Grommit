@@ -288,9 +288,13 @@ function fieldSubmit(){
         strokeColor: color,
         fillColor: color
       });
-      if (time >= 0){
+      if (time > 0){
         shapes[i].window.setOptions({content: "Time to destination: " + timeToWords(time)});
-      } else {
+      }
+      else if (time == -1){
+        shapes[i].window.setOptions({content: "OVER_QUERY_LIMIT"})
+      }
+      else {
         shapes[i].window.setOptions({content: "No route available"});
       }
     }

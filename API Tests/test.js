@@ -18,7 +18,7 @@ function initMap() {
  	   title: 'Hello World!'
  	});
 }
-
+/*
 function codeAddress() {
 	console.log("yo")
 	alert("successful");
@@ -39,3 +39,4 @@ function codeAddress() {
 window.onload = function() {
 	document.getElementById("encode").addEventListener("click", codeAddress);
 }
+*/
