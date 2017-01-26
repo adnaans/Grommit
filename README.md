@@ -1,5 +1,5 @@
 # Grommit
-
+Forked from original repository that I worked on: https://github.com/AShiTheCoder/Grommit
 WARNING: The UI for the page is still in development!
 
 Grommit is a project that I am doing with Palantir and a few other friends at my school. This project uses the Google Maps API to display travel times to various locations in Palo Alto from your pinned location through a color-coded map.
