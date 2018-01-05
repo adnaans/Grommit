@@ -17,7 +17,7 @@
   border-radius: 25px;
   background-color: #96DCE5;
 
-  margin-top: 10%;
+  margin-top: 125px;
    margin-bottom: 20px;
    margin-right: 20px;
    margin-left: 20px;
@@ -59,7 +59,6 @@
   top: 0;
 
 }
-.below{
-  margin:20px;
-  margin-left:45px;
+.above{
+  margin-top:15px;
 }
