@@ -3,6 +3,7 @@ var origins = [];
 var methodtrans;
 var shapes = [];
 var marker, map;
+var placesservice
 
 function initMap() {
   load++;
@@ -20,6 +21,8 @@ function initMap() {
       center: {lat: 37.444359, lng: -122.159901},
       mapTypeId: google.maps.MapTypeId.TERRAIN
     });
+
+    placesservice = new google.maps.places.PlacesService(map);
 
     //setting up boundary coordinates for each region
     var regions = [];
@@ -103,7 +106,7 @@ function initMap() {
     //code for switching marker on MAP click
     google.maps.event.addListener(map, "click", function(e){
       destination = e.latLng;
-      console.log(destination.lat() + ", " + destination.lng());
+      // console.log(destination.lat() + ", " + destination.lng());
       placeDest(destination);
 
       resetMap(destination, origins, shapes, methodtrans);
@@ -183,10 +186,10 @@ function calcTime(dest, ori, index, shapes, methodtrans, times){
     unitSystem: google.maps.UnitSystem.METRIC,
   }, function(response, status) {//upon completion
     if (status != google.maps.DistanceMatrixStatus.OK) {
-      console.log(status);
+      // console.log(status);
       times[index]=-1;
       if(calcTimeDone(times)){
-        console.log(times);
+        // console.log(times);
         calcValues(times);
       }
     }
@@ -200,7 +203,7 @@ function calcTime(dest, ori, index, shapes, methodtrans, times){
         }
       times[index]=time;
       if(calcTimeDone(times)){
-        console.log(times);
+        // console.log(times);
         calcValues(times);
       }
     }
@@ -209,16 +212,35 @@ function calcTime(dest, ori, index, shapes, methodtrans, times){
 
 function fieldSubmit(){
   var input = document.getElementById("address");
-  console.log(input.value);
-  var geocoder = new google.maps.Geocoder();
-  geocoder.geocode({address: input.value}, function(results, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-      placeDest(results[0].geometry.location);
+  // console.log(input.value);
+  // var geocoder = new google.maps.Geocoder();
+  // geocoder.geocode({address: input.value}, function(results, status) {
+  //   if (status == google.maps.GeocoderStatus.OK) {
+  //     placeDest(results[0].geometry.location);
+
+  //     for (var i = 0; i < origins.length; i++){
+  //       calcTime(results[0].geometry.location, origins, i, shapes, methodtrans);
+  //     }
+  //     //console.log("calculated");
+  //   }
+  // });
+  var request = {
+    query: input.value,
+    fields: ['name', 'geometry'],
+    locationBias: {lat: 37.4444, lng: -122.1599}
+  };
+
+  placesservice.findPlaceFromQuery(request, function(results, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      // console.log(results);
+      var location = results[0]["geometry"]["location"]
+      placeDest(location);
+      var times = new Array(80);
 
       for (var i = 0; i < origins.length; i++){
-        calcTime(results[0].geometry.location, origins, i, shapes, methodtrans);
+        calcTime(location, origins, i, shapes, methodtrans, times);
       }
-      //console.log("calculated");
+      // console.log("calculated");
     }
   });
 }
@@ -251,10 +273,10 @@ function fieldSubmit(){
     secondincrement = "" + timeToWords(mintime + range/4) + " to " + timeToWords(mintime + range/2);
     thirdincrement = "" + timeToWords(mintime + range/2) + " to " + timeToWords(mintime + range*3/4);
     fourthincrement = "" + timeToWords(mintime + range*3/4) + " to " + timeToWords(mintime + range);
-    console.log(firstincrement);
-    console.log(secondincrement);
-    console.log(thirdincrement);
-    console.log(fourthincrement);
+    // console.log(firstincrement);
+    // console.log(secondincrement);
+    // console.log(thirdincrement);
+    // console.log(fourthincrement);
     document.getElementById("first").innerHTML=firstincrement;
     document.getElementById("second").innerHTML=secondincrement;
     document.getElementById("third").innerHTML=thirdincrement;
@@ -324,15 +346,32 @@ function calcValues(times){
   resetLegend(mintime, maxtime, range);
 }
 function placeDest(dest){
-  console.log(dest);
+  // console.log(dest);
   var geocoder = new google.maps.Geocoder();
   geocoder.geocode({location: dest}, function(results, status) {
-    console.log("function called");
+    // console.log("function called");
     if (status == google.maps.GeocoderStatus.OK) {
-      marker.window.setContent(results[0].formatted_address);
-      marker.position = dest;
-      console.log(results[0].formatted_address);
-      marker.setMap(map);
+      // marker.window.setContent(results[0].formatted_address);
+      // marker.position = dest;
+      // console.log(results[0].formatted_address);
+      // marker.setMap(map);
+      marker.setMap(null);
+      marker = new google.maps.Marker({
+        position: dest,
+        window: new google.maps.InfoWindow({
+         content: dest.lat + ", " + dest.lng,
+         position: dest
+       }),
+        map: map,
+        title: 'Destination'
+      });
+      google.maps.event.addListener(marker,"mouseover",function(){
+        this.window.open(map, this);
+        // console.log();
+      });
+      google.maps.event.addListener(marker,"mouseout",function(){
+        this.window.close();
+      });
     }
   });
 }
